@@ -39,7 +39,31 @@ public class Graphics extends JFrame {
     // String about.
     String about = "This game was created by AMIRJON SADILLOEV\nStudent of Brunel University in 2022";
 
+    public void frameStart() {
+        // Adding objects to the main panel.
+        main_panel.add(l_title);
+        main_panel.add(b_about);
+        main_panel.add(b_play);
+        main_panel.add(b_exit);
+        frame.add(main_panel);
+
+        // Setting positions, bounds of elements.
+        frame.setSize(600, 600);
+        main_panel.setBounds(0, 0, 600, 600);
+        l_title.setBounds(200, 80, 200, 50);
+
+        // Additional configurations for appereance of frame.
+        frame.setLocationRelativeTo(null); // Initializes frame in the middle of the screen.
+        frame.setResizable(false);
+        frame.setLayout(null);
+        main_panel.setLayout(null);
+
+        // Setting main frame and main panel to visible for the start of the game.
+        frame.setVisible(true);
+        main_panel.setVisible(true);
+    }
+
     public void start() {
-        b_about.addActionListener(new ActionController());
+        frameStart();
     }
 }
