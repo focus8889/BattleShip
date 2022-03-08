@@ -1,21 +1,23 @@
 package graphics;
 
+import java.awt.Color;
+import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import ActionControl.ActionController;
 
-public class Graphics extends JFrame {
+public class Graphics {
     // Main Frame.
-    public JFrame frame = new JFrame();
+    public static JFrame frame = new JFrame();
 
     // Panels of the game
-    public JPanel enemy_board = new JPanel();
-    public JPanel my_board = new JPanel();
+    public static JPanel enemy_board = new JPanel();
+    public static JPanel my_board = new JPanel();
     public JPanel winner = new JPanel();
-    public JPanel game_panel = new JPanel();
-    public JPanel main_panel = new JPanel();
+    public static JPanel game_panel = new JPanel();
+    public static JPanel main_panel = new JPanel();
 
     // Booleans
     boolean flag, turn;
@@ -31,10 +33,10 @@ public class Graphics extends JFrame {
     public JLabel l_sunk = new JLabel("S");
 
     // Game buttons.
-    public JButton b_about = new JButton("About");
-    public JButton b_play = new JButton("Play");
-    public JButton b_exit = new JButton("Exit");
-    public JButton b_quit = new JButton("Quit");
+    public static JButton b_about = new JButton("About");
+    public static JButton b_play = new JButton("Play");
+    public static JButton b_exit = new JButton("Exit");
+    public static JButton b_quit = new JButton("Quit");
 
     // String about.
     String about = "This game was created by AMIRJON SADILLOEV\nStudent of Brunel University in 2022";
@@ -48,22 +50,64 @@ public class Graphics extends JFrame {
         frame.add(main_panel);
 
         // Setting positions, bounds of elements.
-        frame.setSize(600, 600);
-        main_panel.setBounds(0, 0, 600, 600);
+        frame.setSize(800, 800);
+        main_panel.setBounds(0, 0, 800, 800);
         l_title.setBounds(200, 80, 200, 50);
+        b_about.setBounds(500, 500, 80, 60);
+        b_exit.setBounds(200, 400, 200, 80);
+        b_play.setBounds(200, 200, 200, 80);
 
         // Additional configurations for appereance of frame.
         frame.setLocationRelativeTo(null); // Initializes frame in the middle of the screen.
-        frame.setResizable(false);
+        frame.setResizable(false); // Frame is of fixed size.
         frame.setLayout(null);
         main_panel.setLayout(null);
+
+        // Buttons configurations.
+        b_about.setFocusPainted(false); // Does not show pressed button.
+        b_about.setBorderPainted(false); // Removes JButton border.
+        b_about.setContentAreaFilled(false); // Makes JButton background trasparent.
+        b_exit.setFocusPainted(false);
+        b_play.setFocusPainted(false);
 
         // Setting main frame and main panel to visible for the start of the game.
         frame.setVisible(true);
         main_panel.setVisible(true);
+        actionPerformance();
+
     }
 
     public void start() {
         frameStart();
+
+    }
+
+    public void actionPerformance() {
+        b_exit.addActionListener(new ActionController());
+        b_play.addActionListener(new ActionController());
+    }
+
+    public static void gameStart() {
+
+        // Removing main panel.
+        main_panel.setVisible(false);
+        frame.remove(main_panel);
+
+        // Initializing game panel components.
+        frame.add(game_panel);
+        game_panel.add(enemy_board);
+        game_panel.add(my_board);
+
+        // Setting bounds of game panel elements.
+        game_panel.setBounds(0, 0, 800, 800);
+        enemy_board.setBounds(50, 400, 500, 300);
+        my_board.setBounds(50, 50, 500, 300);
+
+        // Additional configuration for panels.
+        my_board.setLayout(new GridLayout(10, 10));
+        enemy_board.setLayout(new GridLayout(10, 10));
+        enemy_board.setBackground(Color.red);
+        my_board.setBackground(Color.blue);
+        game_panel.setLayout(null);
     }
 }
