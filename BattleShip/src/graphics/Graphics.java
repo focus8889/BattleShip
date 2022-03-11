@@ -6,7 +6,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
 import ActionControl.ActionController;
+import logic.LogicProcessing;
 
 public class Graphics {
     // Main Frame.
@@ -21,6 +24,8 @@ public class Graphics {
 
     // Booleans
     boolean flag, turn;
+
+    static LogicProcessing logic = new LogicProcessing();
 
     // Labels.
     public JLabel l_nickname = new JLabel();
@@ -37,6 +42,7 @@ public class Graphics {
     public static JButton b_play = new JButton("Play");
     public static JButton b_exit = new JButton("Exit");
     public static JButton b_quit = new JButton("Quit");
+    public static JRadioButton b_radar = new JRadioButton("Scan");
 
     // String about.
     String about = "This game was created by AMIRJON SADILLOEV\nStudent of Brunel University in 2022";
@@ -97,17 +103,21 @@ public class Graphics {
         frame.add(game_panel);
         game_panel.add(enemy_board);
         game_panel.add(my_board);
+        game_panel.add(b_radar);
 
         // Setting bounds of game panel elements.
         game_panel.setBounds(0, 0, 800, 800);
-        enemy_board.setBounds(50, 400, 500, 300);
-        my_board.setBounds(50, 50, 500, 300);
+        enemy_board.setBounds(50, 400, 520, 300);
+        my_board.setBounds(50, 50, 520, 300);
+        b_radar.setBounds(550, 50, 100, 30);
 
         // Additional configuration for panels.
         my_board.setLayout(new GridLayout(10, 10));
         enemy_board.setLayout(new GridLayout(10, 10));
-        enemy_board.setBackground(Color.red);
-        my_board.setBackground(Color.blue);
+        logic.enemyBoardGenerate();
+        // enemy_board.setBackground(Color.red);
+        // my_board.setBackground(Color.blue);
         game_panel.setLayout(null);
+
     }
 }
