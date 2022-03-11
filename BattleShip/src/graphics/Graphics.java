@@ -1,5 +1,7 @@
 package graphics;
 
+import player.*;
+
 import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.JButton;
@@ -26,6 +28,7 @@ public class Graphics {
     boolean flag, turn;
 
     static LogicProcessing logic = new LogicProcessing();
+    static Player player = new Player();
 
     // Labels.
     public JLabel l_nickname = new JLabel();
@@ -109,15 +112,20 @@ public class Graphics {
         game_panel.setBounds(0, 0, 800, 800);
         enemy_board.setBounds(50, 400, 520, 300);
         my_board.setBounds(50, 50, 520, 300);
-        b_radar.setBounds(550, 50, 100, 30);
+        b_radar.setBounds(580, 50, 100, 30);
 
         // Additional configuration for panels.
         my_board.setLayout(new GridLayout(10, 10));
         enemy_board.setLayout(new GridLayout(10, 10));
         logic.enemyBoardGenerate();
+        logic.myBoardGenerate();
         // enemy_board.setBackground(Color.red);
         // my_board.setBackground(Color.blue);
         game_panel.setLayout(null);
-
+        player.airCraftCarrier = logic.towardsTop(logic.initialPoint(), 3);
+        for (int i = 0; i < player.airCraftCarrier.size(); i++) {
+            int id = player.airCraftCarrier.get(i);
+            logic.my_btn[id].setBackground(Color.RED);
+        }
     }
 }
