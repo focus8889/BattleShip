@@ -1,8 +1,10 @@
 package logic;
 
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-
 import btn.CustomButton;
 import graphics.Graphics;
 import player.Player;
@@ -10,7 +12,7 @@ import player.Player;
 public class LogicProcessing {
     Graphics graphics;
     ArrayList<Integer> enemy_coordinates = new ArrayList<Integer>();
-    CustomButton enemy_btn[] = new CustomButton[101];
+    public static CustomButton enemy_btn[] = new CustomButton[101];
     public CustomButton my_btn[] = new CustomButton[101];
 
     // Buttons id.
@@ -31,6 +33,11 @@ public class LogicProcessing {
                 btn.setID(id);
                 btn.setText(String.valueOf(btn.getId()));
                 btn.setFont(new Font("Arial", Font.BOLD, 11));
+                btn.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        dropRadar(btn.getId());
+                    }
+                });
                 Graphics.enemy_board.add(btn);
                 enemy_btn[btn.getId()] = btn;
                 id++;
@@ -247,12 +254,48 @@ public class LogicProcessing {
     }
 
     public void dropRadar(int clickedButton) {
-        String button = String.valueOf(clickedButton);
-        if (button.length() == 2) {
-            String secondChar = String.valueOf(button.charAt(1));
-            if (Integer.parseInt(secondChar) >= 2) {
+        try {
+            ArrayList<Integer> radarArea = new ArrayList<Integer>();
+            radarArea.add(11);
+            radarArea.add(10);
+            radarArea.add(9);
+            radarArea.add(1);
 
+            int per = clickedButton;
+            String button = String.valueOf(clickedButton);
+            if ((button.length() == 2) & (Graphics.b_radar.isSelected() == true) & player.radar != 0) {
+                String secondChar = String.valueOf(button.charAt(1));
+                if (Integer.parseInt(secondChar) >= 2) {
+                    for (int i = 0; i < radarArea.size(); i++) {
+                        clickedButton -= radarArea.get(i);
+                        enemy_btn[clickedButton].setBackground(Color.red);
+                        clickedButton = per;
+                    }
+                }
             }
+            if (Graphics.b_radar.isSelected()) {
+                System.out.println(clickedButton + "++");
+            }
+            for (int i = radarArea.size() - 1; i >= 0; i--) {
+                System.out.println(i);
+                clickedButton += radarArea.get(i);
+                enemy_btn[clickedButton].setBackground(Color.red);
+                clickedButton = per;
+            }
+
+            for (int i = 0; i < radarArea.size(); i++) {
+                clickedButton -= radarArea.get(i);
+                enemy_btn[clickedButton].setBackground(Color.red);
+                clickedButton = per;
+                System.out.println(radarArea);
+                System.out.println(clickedButton);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error");
         }
     }
+
+    // System.out.println(clickedButton);
+    // System.out.println(radarArea);
 }
