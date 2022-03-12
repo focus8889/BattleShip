@@ -245,4 +245,14 @@ public class LogicProcessing {
             towardsLeft(initial_point, length, flag);
         }
     }
+
+    public void dropRadar(int clickedButton) {
+        String button = String.valueOf(clickedButton);
+        if (button.length() == 2) {
+            String secondChar = String.valueOf(button.charAt(1));
+            if (Integer.parseInt(secondChar) >= 2) {
+
+            }
+        }
+    }
 }
