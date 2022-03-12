@@ -119,13 +119,13 @@ public class Graphics {
         enemy_board.setLayout(new GridLayout(10, 10));
         logic.enemyBoardGenerate();
         logic.myBoardGenerate();
-        // enemy_board.setBackground(Color.red);
-        // my_board.setBackground(Color.blue);
         game_panel.setLayout(null);
-        player.airCraftCarrier = logic.towardsTop(logic.initialPoint(), 3);
+
+        logic.placeShip(logic.initialPoint(), 5, 0, true);
         for (int i = 0; i < player.airCraftCarrier.size(); i++) {
             int id = player.airCraftCarrier.get(i);
             logic.my_btn[id].setBackground(Color.RED);
+            player.print();
         }
     }
 }

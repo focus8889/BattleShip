@@ -18,4 +18,8 @@ public class Player {
     int battleship_health = 4;
     int airCraftCarrier_health = 5;
 
+    public void print() {
+        System.out.println(airCraftCarrier + "Hi");
+    }
+
 }
