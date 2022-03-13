@@ -5,6 +5,7 @@ import javax.swing.JButton;
 public class CustomButton extends JButton {
     private boolean busy;
     private int id = 0;
+    public int row;
 
     public boolean getBusy() {
         return this.busy;
