@@ -120,7 +120,7 @@ public class Graphics {
         logic.enemyBoardGenerate();
         logic.myBoardGenerate();
         game_panel.setLayout(null);
-        logic.left(1, 3, true);
+        logic.left(logic.initialPoint(), 3, true);
 
         logic.placeShip(logic.initialPoint(), 5, 0, true);
         for (int i = 0; i < player.airCraftCarrier.size(); i++) {

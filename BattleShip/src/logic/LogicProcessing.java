@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import btn.CustomButton;
 import graphics.Graphics;
-import player.Player;
 
 public class LogicProcessing {
     Graphics graphics;
@@ -17,8 +16,39 @@ public class LogicProcessing {
 
     // Buttons id.
     int id;
-    //
-    Player player = new Player();
+
+    /// Player and CPU fields.
+    // Coordinates of the ships.
+    public ArrayList<Integer> patrolBoat = new ArrayList<Integer>(2);
+    public ArrayList<Integer> submarine = new ArrayList<Integer>(3);
+    public ArrayList<Integer> destroyer = new ArrayList<Integer>(3);
+    public ArrayList<Integer> battleship = new ArrayList<Integer>(4);
+    public ArrayList<Integer> airCraftCarrier = new ArrayList<Integer>(5);
+
+    // Enemy occupied coordinates.
+    public ArrayList<Integer> enemyOccupied = new ArrayList<Integer>();
+    // Health points of ships.
+    public int patrol_boat_health = 2;
+    public int submarine_health = 3;
+    public int destroyer_health = 3;
+    public int battleship_health = 4;
+    public int airCraftCarrier_health = 5;
+
+    // Radar quantity.
+    public int radar = 4;
+
+    // CPU.// Coordinates of the ships.
+    ArrayList<Integer> en_patrolBoat = new ArrayList<Integer>(2);
+    ArrayList<Integer> en_submarine = new ArrayList<Integer>(3);
+    ArrayList<Integer> en_destroyer = new ArrayList<Integer>(3);
+    ArrayList<Integer> en_battleship = new ArrayList<Integer>(4);
+    ArrayList<Integer> en_airCraftCarrier = new ArrayList<Integer>(5);
+    // Health points of ships.
+    int en_patrol_boat_health = 2;
+    int en_submarine_health = 3;
+    int en_destroyer_health = 3;
+    int en_battleship_health = 4;
+    int en_airCraftCarrier_health = 5;
 
     // Initial coordinate and direction.
     static int initial_point_range = (100 + 0) + 1;
@@ -36,6 +66,7 @@ public class LogicProcessing {
                 btn.setFont(new Font("Arial", Font.BOLD, 11));
                 btn.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
+                        check(btn.getId());
                         dropRadar(btn.getId());
                         System.out.println("This button's row is " + btn.row);
                     }
@@ -144,9 +175,6 @@ public class LogicProcessing {
                 coordinates.clear();
             }
         }
-        if (length == 5) {
-            player.airCraftCarrier = coordinates;
-        }
 
         System.out.println(coordinates);
         return coordinates;
@@ -236,24 +264,32 @@ public class LogicProcessing {
         // Ask How to fix if button does not exist??
         // How to connect Player and CPU ships inorder to interact with the??
         while (true) {
-            for (int i = 0; i < length - 1; i++) {
-                pos--;
-                coordinates.add(pos);
-                if ((enemy_btn[pos].row == row) & (enemy_btn[pos] != null)) {
-                    continue;
-
-                } else {
-                    coordinates.clear();
-                    pos = initialPoint();
-                    row = enemy_btn[pos].row;
-                    i = 0;
+            // Checking if initital point of cell is not to small.
+            // In order to prevent errors.
+            if (pos > length) {
+                for (int i = 0; i < length - 1; i++) {
+                    pos--;
                     coordinates.add(pos);
-                }
+                    if ((enemy_btn[pos].row == row) & (pos >= length)) {
+                        continue;
 
+                    } else {
+                        coordinates.clear();
+                        pos = initialPoint();
+                        row = enemy_btn[pos].row;
+                        i = 0;
+                        coordinates.add(pos);
+                    }
+                }
+                break;
+            } else {
+                coordinates.clear();
+                pos = initialPoint();
+                row = enemy_btn[pos].row;
             }
-            break;
+
         }
-        System.out.println("This is right coordinates: " + coordinates);
+        System.out.println("This is left coordinates: " + coordinates);
         return coordinates;
     }
 
@@ -321,7 +357,7 @@ public class LogicProcessing {
 
             int per = clickedButton;
             String button = String.valueOf(clickedButton);
-            if ((button.length() == 2) & (Graphics.b_radar.isSelected() == true) & player.radar != 0) {
+            if ((button.length() == 2) & (Graphics.b_radar.isSelected() == true) & radar != 0) {
                 String secondChar = String.valueOf(button.charAt(1));
                 if (Integer.parseInt(secondChar) >= 2) {
                     for (int i = 0; i < radarArea.size(); i++) {
@@ -345,8 +381,6 @@ public class LogicProcessing {
                 clickedButton -= radarArea.get(i);
                 enemy_btn[clickedButton].setBackground(Color.red);
                 clickedButton = per;
-                System.out.println(radarArea);
-                System.out.println(clickedButton);
             }
 
         } catch (Exception e) {
@@ -354,6 +388,20 @@ public class LogicProcessing {
         }
     }
 
-    // System.out.println(clickedButton);
-    // System.out.println(radarArea);
+    private void shoot(int coordinate) {
+        enemyOccupied.add(1);
+        for (int i = 0; i < enemyOccupied.size(); i++) {
+            if (coordinate == enemyOccupied.get(i)) {
+                enemy_btn[enemyOccupied.get(i)].setText("H");
+            }
+        }
+    }
+
+    private void check(int cell) {
+        if (Graphics.b_radar.isSelected()) {
+            dropRadar(cell);
+        } else {
+            shoot(cell);
+        }
+    }
 }
