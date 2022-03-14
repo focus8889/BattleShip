@@ -31,11 +31,13 @@ public class LogicProcessing {
             for (int j = 0; j < 10; j++) {
                 CustomButton btn = new CustomButton();
                 btn.setID(id);
+                btn.row = i;
                 btn.setText(String.valueOf(btn.getId()));
                 btn.setFont(new Font("Arial", Font.BOLD, 11));
                 btn.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         dropRadar(btn.getId());
+                        System.out.println("This button's row is " + btn.row);
                     }
                 });
                 Graphics.enemy_board.add(btn);
@@ -197,6 +199,62 @@ public class LogicProcessing {
         System.out.println(coordinates);
         return coordinates;
 
+    }
+
+    public ArrayList<Integer> right(int initial_point, int length, boolean flag) {
+        ArrayList<Integer> coordinates = new ArrayList<Integer>();
+        int row = enemy_btn[initial_point].row;
+        int pos = initial_point;
+        coordinates.add(pos);
+        while (true) {
+            for (int i = 0; i < length - 1; i++) {
+                pos++;
+                coordinates.add(pos);
+                if (enemy_btn[pos].row == row) {
+                    continue;
+
+                } else {
+                    coordinates.clear();
+                    pos = initialPoint();
+                    row = enemy_btn[pos].row;
+                    i = 0;
+                    coordinates.add(pos);
+                }
+
+            }
+            break;
+        }
+        System.out.println("This is right coordinates: " + coordinates);
+        return coordinates;
+    }
+
+    public ArrayList<Integer> left(int initial_point, int length, boolean flag) {
+        ArrayList<Integer> coordinates = new ArrayList<Integer>();
+        int row = enemy_btn[initial_point].row;
+        int pos = initial_point;
+        coordinates.add(pos);
+        // Ask How to fix if button does not exist??
+        // How to connect Player and CPU ships inorder to interact with the??
+        while (true) {
+            for (int i = 0; i < length - 1; i++) {
+                pos--;
+                coordinates.add(pos);
+                if ((enemy_btn[pos].row == row) & (enemy_btn[pos] != null)) {
+                    continue;
+
+                } else {
+                    coordinates.clear();
+                    pos = initialPoint();
+                    row = enemy_btn[pos].row;
+                    i = 0;
+                    coordinates.add(pos);
+                }
+
+            }
+            break;
+        }
+        System.out.println("This is right coordinates: " + coordinates);
+        return coordinates;
     }
 
     public ArrayList<Integer> towardsLeft(int initial_point, int length, boolean flag) {
