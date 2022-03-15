@@ -189,16 +189,82 @@ public class LogicProcessing {
     public ArrayList<Integer> right(int initial_point, int length, boolean flag) {
         ArrayList<Integer> coordinates = new ArrayList<Integer>();
         int pos = initial_point;
-        int row = this.enemy_btn[pos].row;
-        coordinates.add(pos);
+        int row;
+        while (true) {
+            try {
+                row = this.enemy_btn[pos].row;
+                break;
+            } catch (Exception e) {
+                pos = initialPoint();
+            }
+        }
         while (true) {
             // Checking if initital point of cell is not to small.
             // In order to prevent errors.
             try {
                 if (pos > length) {
                     coordinates.add(pos);
-                    for (int i = 1; i < length - 1; i++) {
+                    for (int i = 0; i < length - 1; i++) {
                         pos++;
+                        if (this.enemy_btn[pos].row == row) {
+                            coordinates.add(pos);
+                            continue;
+                        } else {
+                            // It gets index of I to -1, which lets to restart for loop.
+                            if (i == 0) {
+                                i--;
+                                coordinates.clear();
+                                pos = initialPoint();
+                                row = this.enemy_btn[pos].row;
+                                coordinates.add(pos);
+                            } else {
+                                i -= i + 1;
+                                coordinates.clear();
+                                pos = initialPoint();
+                                row = this.enemy_btn[pos].row;
+                                coordinates.add(pos);
+                            }
+                        }
+                    }
+                    break;
+                } else {
+                    coordinates.clear();
+                    pos = initialPoint();
+                    row = this.enemy_btn[pos].row;
+                    continue;
+                }
+            } catch (Exception e) {
+                coordinates.clear();
+                pos = initialPoint();
+                row = this.enemy_btn[pos].row;
+                continue;
+            }
+        }
+        System.out.println("This is right coordinates: " + coordinates);
+        return coordinates;
+    }
+
+    public ArrayList<Integer> left(int initial_point, int length, boolean flag) {
+        ArrayList<Integer> coordinates = new ArrayList<Integer>();
+        int pos = initial_point;
+        int row;
+        while (true) {
+            try {
+                // Checking if the button is not of index boundries.
+                row = this.enemy_btn[pos].row;
+                break;
+            } catch (Exception e) {
+                pos = initialPoint();
+            }
+        }
+        while (true) {
+            // Checking if initital point of cell is not to small.
+            // In order to prevent errors.
+            try {
+                if (pos > length) {
+                    coordinates.add(pos);
+                    for (int i = 0; i < length - 1; i++) {
+                        pos--;
                         if (this.enemy_btn[pos].row == row) {
                             coordinates.add(pos);
                             continue;
@@ -216,63 +282,25 @@ public class LogicProcessing {
                                 row = this.enemy_btn[pos].row;
                                 coordinates.add(pos);
                             }
-
                         }
                     }
                     break;
                 } else {
+                    coordinates.clear();
                     pos = initialPoint();
                     row = this.enemy_btn[pos].row;
                     continue;
                 }
-
             } catch (Exception e) {
+                coordinates.clear();
                 pos = initialPoint();
                 row = this.enemy_btn[pos].row;
                 continue;
             }
-
         }
-        System.out.println("This is right coordinates: " + coordinates);
+        System.out.println("This is right left: " + coordinates);
         return coordinates;
 
-    }
-
-    public ArrayList<Integer> left(int initial_point, int length, boolean flag) {
-        ArrayList<Integer> coordinates = new ArrayList<Integer>();
-        int row = this.enemy_btn[initial_point].row;
-        int pos = initial_point;
-        coordinates.add(pos);
-        // Ask How to fix if button does not exist??
-        // How to connect Player and CPU ships inorder to interact with the??
-        while (true) {
-            // Checking if initital point of cell is not to small.
-            // In order to prevent errors.
-            if (pos > length) {
-                for (int i = 0; i < length - 1; i++) {
-                    pos--;
-                    coordinates.add(pos);
-                    if ((this.enemy_btn[pos].row == row) & (pos >= length)) {
-                        continue;
-
-                    } else {
-                        coordinates.clear();
-                        pos = initialPoint();
-                        row = this.enemy_btn[pos].row;
-                        i = 0;
-                        coordinates.add(pos);
-                    }
-                }
-                break;
-            } else {
-                coordinates.clear();
-                pos = initialPoint();
-                row = this.enemy_btn[pos].row;
-            }
-
-        }
-        System.out.println("This is left coordinates: " + coordinates);
-        return coordinates;
     }
 
     public void placeShip(int initial_point, int length, int direction, ArrayList<Integer> coordinates, boolean flag) {
