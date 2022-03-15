@@ -188,33 +188,51 @@ public class LogicProcessing {
 
     public ArrayList<Integer> right(int initial_point, int length, boolean flag) {
         ArrayList<Integer> coordinates = new ArrayList<Integer>();
-        int row = this.enemy_btn[initial_point].row;
         int pos = initial_point;
+        int row = this.enemy_btn[pos].row;
+        coordinates.add(pos);
         while (true) {
-            if (pos > length) {
-                for (int i = 0; i < length; i++) {
-                    pos++;
+            // Checking if initital point of cell is not to small.
+            // In order to prevent errors.
+            try {
+                if (pos > length) {
                     coordinates.add(pos);
-                    if ((this.enemy_btn[pos].row == row) & (pos >= length)) {
-                        continue;
+                    for (int i = 1; i < length - 1; i++) {
+                        pos++;
+                        if (this.enemy_btn[pos].row == row) {
+                            coordinates.add(pos);
+                            continue;
+                        } else {
+                            if (i == 0) {
+                                i--;
+                                coordinates.clear();
+                                pos = initialPoint();
+                                row = this.enemy_btn[pos].row;
+                                coordinates.add(pos);
+                            } else {
+                                i -= i + 1;
+                                coordinates.clear();
+                                pos = initialPoint();
+                                row = this.enemy_btn[pos].row;
+                                coordinates.add(pos);
+                            }
 
-                    } else {
-                        coordinates.clear();
-                        pos = initialPoint();
-                        row = this.enemy_btn[pos].row;
-                        i = 0;
-                        coordinates.add(pos);
+                        }
                     }
+                    break;
+                } else {
+                    pos = initialPoint();
+                    row = this.enemy_btn[pos].row;
+                    continue;
                 }
-                break;
-            } else {
-                coordinates.clear();
+
+            } catch (Exception e) {
                 pos = initialPoint();
                 row = this.enemy_btn[pos].row;
+                continue;
             }
 
         }
-
         System.out.println("This is right coordinates: " + coordinates);
         return coordinates;
 

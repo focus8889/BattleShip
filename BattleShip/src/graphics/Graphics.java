@@ -170,7 +170,7 @@ public class Graphics {
         logic.enemyBoardGenerate();
         logic.myBoardGenerate();
 
-        logic.right(10, 3, true);
+        logic.right(100, 3, true);
         // logic.placeShip(logic.initialPoint(), 5, 2, logic.airCraftCarrier, true);
         // logic.placeShip(logic.initialPoint(), 4, 2, logic.battleship, true);
         // logic.placeShip(logic.initialPoint(), 3, 2, logic.destroyer, true);
