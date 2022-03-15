@@ -170,13 +170,23 @@ public class Graphics {
         logic.enemyBoardGenerate();
         logic.myBoardGenerate();
 
-        logic.right(-1, 3, true);
-        logic.left(-1, 3, true);
-        // logic.placeShip(logic.initialPoint(), 5, 2, logic.airCraftCarrier, true);
-        // logic.placeShip(logic.initialPoint(), 4, 2, logic.battleship, true);
-        // logic.placeShip(logic.initialPoint(), 3, 2, logic.destroyer, true);
-        // logic.placeShip(logic.initialPoint(), 3, 3, logic.submarine, true);
-        // logic.placeShip(logic.initialPoint(), 2, 3, logic.patrolBoat, true);
+        // logic.down(48, 2, true);
+        // logic.down(48, 2, true);
+        // logic.down(48, 2, true);
+        // logic.down(-101, 5, true);
+        // logic.right(-1, 3, true);
+        // logic.left(1000, 3, true);
+        // logic.towardsTop(1002, 3, true);
+        logic.placeShip(logic.initialPoint(), 5, logic.direction(),
+                logic.airCraftCarrier, true);
+        logic.placeShip(logic.initialPoint(), 4, logic.direction(), logic.battleship,
+                true);
+        logic.placeShip(logic.initialPoint(), 3, logic.direction(), logic.destroyer,
+                true);
+        logic.placeShip(logic.initialPoint(), 3, logic.direction(), logic.submarine,
+                true);
+        logic.placeShip(logic.initialPoint(), 2, logic.direction(), logic.patrolBoat,
+                true);
         // for (int i = 0; i < logic.airCraftCarrier.size(); i++) {
         // System.out.println("Array has: " + logic.airCraftCarrier.get(i));
         // }
