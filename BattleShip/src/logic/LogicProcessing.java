@@ -1,6 +1,7 @@
 package logic;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -11,7 +12,7 @@ import graphics.Graphics;
 public class LogicProcessing {
     Graphics graphics;
     ArrayList<Integer> enemy_coordinates = new ArrayList<Integer>();
-    public static CustomButton enemy_btn[] = new CustomButton[101];
+    public CustomButton enemy_btn[] = new CustomButton[101];
     public CustomButton my_btn[] = new CustomButton[101];
 
     // Buttons id.
@@ -54,8 +55,13 @@ public class LogicProcessing {
     static int initial_point_range = (100 + 0) + 1;
     static int direction_range = (3 + 0) + 1;
 
+    public LogicProcessing(Graphics parent) {
+        this.graphics = parent;
+    }
+
     // Generating Enemy Board.
     public void enemyBoardGenerate() {
+        System.out.println("Created");
         id = 1;
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -63,21 +69,21 @@ public class LogicProcessing {
                 btn.setID(id);
                 btn.row = i;
                 btn.setText(String.valueOf(btn.getId()));
+                btn.setVisible(true);
                 btn.setFont(new Font("Arial", Font.BOLD, 11));
                 btn.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        check(btn.getId());
                         dropRadar(btn.getId());
                         System.out.println("This button's row is " + btn.row);
                     }
                 });
-                Graphics.enemy_board.add(btn);
-                enemy_btn[btn.getId()] = btn;
+                this.graphics.enemy_board.add(btn);
+                this.enemy_btn[btn.getId()] = btn;
                 id++;
-
             }
 
         }
+        System.out.println("Done");
     }
 
     // Generating Player board.
@@ -89,8 +95,8 @@ public class LogicProcessing {
                 btn.setID(id);
                 btn.setText(String.valueOf(btn.getId()));
                 btn.setFont(new Font("Arial", Font.BOLD, 11));
-                Graphics.my_board.add(btn);
-                my_btn[btn.getId()] = btn;
+                this.graphics.my_board.add(btn);
+                this.my_btn[btn.getId()] = btn;
                 id++;
 
             }
@@ -120,10 +126,10 @@ public class LogicProcessing {
                     int pos = initial_point + 10;
                     coordinates.add(initial_point);
                     for (int i = 0; i < length - 1; i++) {
-                        if (my_btn[pos].getBusy() == false) {
+                        if (this.my_btn[pos].getBusy() == false) {
                             coordinates.add(pos);
-                            my_btn[initial_point].setBusy();
-                            my_btn[pos].setBusy();
+                            this.my_btn[initial_point].setBusy();
+                            this.my_btn[pos].setBusy();
                             pos += 10;
                             flag = false;
                         } else {
@@ -155,10 +161,10 @@ public class LogicProcessing {
                     int pos = initial_point - 10;
                     coordinates.add(initial_point);
                     for (int i = 0; i < length - 1; i++) {
-                        if (my_btn[pos].getBusy() == false) {
+                        if (this.my_btn[pos].getBusy() == false) {
                             coordinates.add(pos);
-                            my_btn[initial_point].setBusy();
-                            my_btn[pos].setBusy();
+                            this.my_btn[initial_point].setBusy();
+                            this.my_btn[pos].setBusy();
                             pos -= 10;
                             flag = false;
                         } else {
@@ -180,85 +186,43 @@ public class LogicProcessing {
         return coordinates;
     }
 
-    public ArrayList<Integer> towardsRight(int initial_point, int length, boolean flag) {
+    public ArrayList<Integer> right(int initial_point, int length, boolean flag) {
         ArrayList<Integer> coordinates = new ArrayList<Integer>();
-        String p = String.valueOf(initial_point);
+        int row = this.enemy_btn[initial_point].row;
+        int pos = initial_point;
         while (true) {
-            if (p.length() == 2) {
-                for (int i = 0; i < length - 1; i++) {
-                    int pos = Integer.parseInt(p);
-                    coordinates.add(pos);
+            if (pos > length) {
+                for (int i = 0; i < length; i++) {
                     pos++;
-                    char c = String.valueOf(pos).charAt(1);
-                    p = String.valueOf(pos);
-                    if ((p.length() == 2) & (c != '1')) {
-                        coordinates.add(Integer.parseInt(p));
+                    coordinates.add(pos);
+                    if ((this.enemy_btn[pos].row == row) & (pos >= length)) {
                         continue;
-                    }
-                    if ((p.length() == 1) & (p.charAt(0) != 1)) {
-                        coordinates.add(Integer.parseInt(p));
-                        continue;
+
                     } else {
-                        while (flag) {
-                            i = 0;
-                            p = String.valueOf(initialPoint());
-                            coordinates.clear();
-                            if (p.length() == 2) {
-
-                            }
-                            break;
-                        }
-
+                        coordinates.clear();
+                        pos = initialPoint();
+                        row = this.enemy_btn[pos].row;
+                        i = 0;
+                        coordinates.add(pos);
                     }
-
                 }
                 break;
             } else {
-                while (flag) {
-                    p = String.valueOf(initialPoint());
-                    coordinates.clear();
-                    if (p.length() == 2) {
-
-                    }
-                    break;
-                }
+                coordinates.clear();
+                pos = initialPoint();
+                row = this.enemy_btn[pos].row;
             }
+
         }
-        System.out.println(coordinates);
-        return coordinates;
 
-    }
-
-    public ArrayList<Integer> right(int initial_point, int length, boolean flag) {
-        ArrayList<Integer> coordinates = new ArrayList<Integer>();
-        int row = enemy_btn[initial_point].row;
-        int pos = initial_point;
-        coordinates.add(pos);
-        while (true) {
-            for (int i = 0; i < length - 1; i++) {
-                pos++;
-                coordinates.add(pos);
-                if (enemy_btn[pos].row == row) {
-                    continue;
-
-                } else {
-                    coordinates.clear();
-                    pos = initialPoint();
-                    row = enemy_btn[pos].row;
-                    i = 0;
-                    coordinates.add(pos);
-                }
-
-            }
-            break;
-        }
         System.out.println("This is right coordinates: " + coordinates);
         return coordinates;
+
     }
 
     public ArrayList<Integer> left(int initial_point, int length, boolean flag) {
         ArrayList<Integer> coordinates = new ArrayList<Integer>();
-        int row = enemy_btn[initial_point].row;
+        int row = this.enemy_btn[initial_point].row;
         int pos = initial_point;
         coordinates.add(pos);
         // Ask How to fix if button does not exist??
@@ -270,13 +234,13 @@ public class LogicProcessing {
                 for (int i = 0; i < length - 1; i++) {
                     pos--;
                     coordinates.add(pos);
-                    if ((enemy_btn[pos].row == row) & (pos >= length)) {
+                    if ((this.enemy_btn[pos].row == row) & (pos >= length)) {
                         continue;
 
                     } else {
                         coordinates.clear();
                         pos = initialPoint();
-                        row = enemy_btn[pos].row;
+                        row = this.enemy_btn[pos].row;
                         i = 0;
                         coordinates.add(pos);
                     }
@@ -285,7 +249,7 @@ public class LogicProcessing {
             } else {
                 coordinates.clear();
                 pos = initialPoint();
-                row = enemy_btn[pos].row;
+                row = this.enemy_btn[pos].row;
             }
 
         }
@@ -293,46 +257,7 @@ public class LogicProcessing {
         return coordinates;
     }
 
-    public ArrayList<Integer> towardsLeft(int initial_point, int length, boolean flag) {
-        ArrayList<Integer> coordinates = new ArrayList<Integer>();
-        String p = String.valueOf(initial_point);
-        while (true) {
-            if (p.length() == 2) {
-                for (int i = 0; i < length - 1; i++) {
-                    int pos = Integer.parseInt(p);
-                    pos--;
-                    char c = String.valueOf(pos).charAt(0);
-                    p = String.valueOf(pos);
-                    if ((p.length() == 2) & (p.charAt(0) == c)) {
-                        coordinates.add(Integer.parseInt(p));
-                    } else {
-                        while (flag) {
-                            i = 0;
-                            p = String.valueOf(initialPoint());
-                            coordinates.clear();
-                            if (p.length() == 2) {
-
-                            }
-                            break;
-                        }
-                    }
-                }
-                break;
-            } else {
-                while (flag) {
-                    p = String.valueOf(initialPoint());
-                    coordinates.clear();
-                    if (p.length() == 2) {
-
-                    }
-                    break;
-                }
-            }
-        }
-        return coordinates;
-    }
-
-    public void placeShip(int initial_point, int length, int direction, boolean flag) {
+    public void placeShip(int initial_point, int length, int direction, ArrayList<Integer> coordinates, boolean flag) {
         // 0 goes to top.
         if (direction == 0) {
             towardsTop(initial_point, length, flag);
@@ -341,67 +266,107 @@ public class LogicProcessing {
             towardsBottom(initial_point, length, flag);
         }
         if (direction == 2) {
-            towardsRight(initial_point, length, flag);
+            right(initial_point, length, flag);
         } else {
-            towardsLeft(initial_point, length, flag);
+            left(initial_point, length, flag);
         }
     }
 
     public void dropRadar(int clickedButton) {
-        try {
-            ArrayList<Integer> radarArea = new ArrayList<Integer>();
-            radarArea.add(11);
-            radarArea.add(10);
-            radarArea.add(9);
-            radarArea.add(1);
-
-            int per = clickedButton;
-            String button = String.valueOf(clickedButton);
-            if ((button.length() == 2) & (Graphics.b_radar.isSelected() == true) & radar != 0) {
-                String secondChar = String.valueOf(button.charAt(1));
-                if (Integer.parseInt(secondChar) >= 2) {
-                    for (int i = 0; i < radarArea.size(); i++) {
-                        clickedButton -= radarArea.get(i);
-                        enemy_btn[clickedButton].setBackground(Color.red);
-                        clickedButton = per;
-                    }
+        ArrayList<Integer> radarArea = new ArrayList<Integer>();
+        ArrayList<Integer> coordinates = new ArrayList<Integer>();
+        radarArea.add(11);
+        radarArea.add(10);
+        radarArea.add(9);
+        radarArea.add(1);
+        int per = clickedButton;
+        while (true) {
+            for (int i = 0; i < radarArea.size(); i++) {
+                try {
+                    clickedButton -= radarArea.get(i);
+                    coordinates.add(clickedButton);
+                    this.enemy_btn[clickedButton].setBackground(Color.RED);
+                    clickedButton = per;
+                } catch (Exception e) {
+                    continue;
                 }
             }
-            if (Graphics.b_radar.isSelected()) {
-                System.out.println(clickedButton + "++");
-            }
-            for (int i = radarArea.size() - 1; i >= 0; i--) {
-                System.out.println(i);
-                clickedButton += radarArea.get(i);
-                enemy_btn[clickedButton].setBackground(Color.red);
-                clickedButton = per;
-            }
-
             for (int i = 0; i < radarArea.size(); i++) {
-                clickedButton -= radarArea.get(i);
-                enemy_btn[clickedButton].setBackground(Color.red);
-                clickedButton = per;
+                try {
+                    clickedButton += radarArea.get(i);
+                    coordinates.add(clickedButton);
+                    this.enemy_btn[clickedButton].setBackground(Color.RED);
+                    clickedButton = per;
+                } catch (Exception e) {
+                    continue;
+                }
             }
-
-        } catch (Exception e) {
-            System.out.println("Error");
+            break;
         }
+
+        // try {
+
+        // int per = clickedButton;
+        // String button = String.valueOf(clickedButton);
+        // if ((button.length() == 2) & (graphics.b_radar.isSelected() == true) & radar
+        // != 0) {
+        // String secondChar = String.valueOf(button.charAt(1));
+        // if (Integer.parseInt(secondChar) >= 2) {
+        // for (int i = 0; i < radarArea.size(); i++) {
+        // clickedButton -= radarArea.get(i);
+        // enemy_btn[clickedButton].setBackground(Color.red);
+        // clickedButton = per;
+        // }
+        // }
+        // }
+        // if (graphics.b_radar.isSelected()) {
+        // System.out.println(clickedButton + "++");
+        // }
+        // for (int i = radarArea.size() - 1; i >= 0; i--) {
+        // System.out.println(i);
+        // clickedButton += radarArea.get(i);
+        // enemy_btn[clickedButton].setBackground(Color.red);
+        // clickedButton = per;
+        // }
+
+        // for (int i = 0; i < radarArea.size(); i++) {
+        // clickedButton -= radarArea.get(i);
+        // enemy_btn[clickedButton].setBackground(Color.red);
+        // clickedButton = per;
+        // }
+        // } catch (Exception e) {
+        // System.out.println("Error");
+        // }
     }
 
     private void shoot(int coordinate) {
-        enemyOccupied.add(1);
-        for (int i = 0; i < enemyOccupied.size(); i++) {
-            if (coordinate == enemyOccupied.get(i)) {
-                enemy_btn[enemyOccupied.get(i)].setText("H");
+        this.enemyOccupied.add(1);
+        for (int i = 0; i < this.enemyOccupied.size(); i++) {
+            if (coordinate == this.enemyOccupied.get(i)) {
+                this.enemy_btn[this.enemyOccupied.get(i)].setText("H");
             }
         }
     }
 
     private void check(int cell) {
-        if (Graphics.b_radar.isSelected()) {
+        if (graphics.b_radar.isSelected()) {
             dropRadar(cell);
         } else {
             shoot(cell);
+        }
+    }
+
+    public void cpuMove(boolean flag) {
+        if (flag == true) {
+            while (true) {
+                int shoot = initialPoint();
+                if (!this.enemyOccupied.contains(shoot)) {
+                    this.my_btn[shoot].setBackground(Color.red);
+                    break;
+                } else {
+                    continue;
+                }
+            }
         }
     }
 }
