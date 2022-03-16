@@ -180,7 +180,7 @@ public class Graphics {
         logic.placeShip(73, 5, 2,
                 logic.airCraftCarrier, true);
         System.out.println("AirCraft!");
-        logic.placeShip(77, 4, 2, logic.battleship,
+        logic.placeShip(80, 4, 1, logic.battleship,
                 true);
         // System.out.println("Battleship");
         // logic.placeShip(logic.initialPoint(), 3, logic.direction(), logic.destroyer,

@@ -136,7 +136,7 @@ public class LogicProcessing {
         }
         while (true) {
             try {
-                pos = initial_point + 10;
+                pos = initial_point;
                 coordinates.add(pos);
                 for (int i = 0; i < length - 1; i++) {
                     if (this.enemy_btn[pos].getBusy() == false) {
@@ -157,6 +157,7 @@ public class LogicProcessing {
                         }
                     }
                 }
+                // I need to validate last iteration of for loop!
                 break;
             } catch (Exception e) {
                 coordinates.clear();
@@ -165,9 +166,12 @@ public class LogicProcessing {
 
             }
         }
-        coordinates.add(initial_point);
+        // coordinates.add(initial_point);
         for (int index = 0; index < coordinates.size(); index++) {
+            System.out.println(index);
+            System.out.println(coordinates.get(index));
             this.enemy_btn[coordinates.get(index)].setBackground(new Color(255, 86, 74));
+
         }
         for (int i = 0; i < coordinates.size(); i++) {
             enemy_btn[coordinates.get(i)].setBusy();
