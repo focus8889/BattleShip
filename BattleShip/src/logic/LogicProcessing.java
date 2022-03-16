@@ -126,15 +126,7 @@ public class LogicProcessing {
                 if (this.enemy_btn[initial_point].getBusy() == false) {
                     break;
                 } else {
-                    while (true) {
-                        try {
-                            initial_point = initialPoint();
-                            break;
-                        } catch (Exception e) {
-                            continue;
-                        }
-                    }
-
+                    initial_point = initialPoint();
                 }
             } catch (Exception e) {
                 initial_point = initialPoint();
@@ -145,10 +137,11 @@ public class LogicProcessing {
         while (true) {
             try {
                 pos = initial_point + 10;
+                coordinates.add(pos);
                 for (int i = 0; i < length - 1; i++) {
                     if (this.enemy_btn[pos].getBusy() == false) {
-                        coordinates.add(pos);
                         pos += 10;
+                        coordinates.add(pos);
                     } else {
                         // It gets index of I to -1, which lets to restart for loop.
                         if (i == 0) {
@@ -192,11 +185,14 @@ public class LogicProcessing {
             try {
                 if (this.enemy_btn[initial_point].getBusy() == false) {
                     break;
+                } else {
+                    initial_point = initialPoint();
                 }
             } catch (Exception e) {
                 initial_point = initialPoint();
                 continue;
             }
+
         }
 
         while (true) {
@@ -257,7 +253,7 @@ public class LogicProcessing {
             // Checking if initital point of cell is not to small.
             // In order to prevent errors.
             try {
-                if (pos > length) {
+                if ((pos > length) & (this.enemy_btn[initial_point].getBusy() == false)) {
                     coordinates.add(pos);
                     for (int i = 0; i < length - 1; i++) {
                         pos++;
@@ -284,7 +280,8 @@ public class LogicProcessing {
                     break;
                 } else {
                     coordinates.clear();
-                    pos = initialPoint();
+                    initial_point = initialPoint();
+                    pos = initial_point;
                     row = this.enemy_btn[pos].row;
                     continue;
                 }
@@ -324,7 +321,7 @@ public class LogicProcessing {
             // Checking if initital point of cell is not to small.
             // In order to prevent errors.
             try {
-                if (pos > length) {
+                if ((pos > length) & (this.enemy_btn[initial_point].getBusy() == false)) {
                     coordinates.add(pos);
                     for (int i = 0; i < length - 1; i++) {
                         pos--;
@@ -349,8 +346,13 @@ public class LogicProcessing {
                     }
                     break;
                 } else {
+                    ////
+                    //// CHECK CHECK CHECK
+                    //// IF ANY ERROR!
+
                     coordinates.clear();
-                    pos = initialPoint();
+                    initial_point = initialPoint();
+                    pos = initial_point;
                     row = this.enemy_btn[pos].row;
                     continue;
                 }
