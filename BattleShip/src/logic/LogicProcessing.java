@@ -49,9 +49,10 @@ public class LogicProcessing {
     int en_destroyer_health = 3;
     int en_battleship_health = 4;
     int en_airCraftCarrier_health = 5;
+    public ArrayList<Integer> patrot;
 
     // Initial coordinate and direction.
-    static int initial_point_range = (100 + 0) + 1;
+    static int initial_point_range = (99 + 0) + 1;
     static int direction_range = (3 + 0) + 1;
 
     public LogicProcessing(Graphics parent) {
@@ -136,29 +137,37 @@ public class LogicProcessing {
         }
         while (true) {
             try {
-                pos = initial_point;
-                coordinates.add(pos);
+                pos = initial_point; // 50
                 for (int i = 0; i < length - 1; i++) {
-                    if (this.enemy_btn[pos].getBusy() == false) {
-                        pos += 10;
-                        coordinates.add(pos);
+                    if (this.enemy_btn[pos].getBusy() == false) { // 1 -- false, 2 -- false,
+                        coordinates.add(pos); // [50, 60]
+                        pos += 10;// 60, 70
+                        System.out.println(pos);
                     } else {
+
                         // It gets index of I to -1, which lets to restart for loop.
                         if (i == 0) {
                             i--;
                             coordinates.clear();
                             pos = initialPoint();
-                            coordinates.add(pos);
                         } else {
                             i -= i + 1;
                             coordinates.clear();
                             pos = initialPoint();
-                            coordinates.add(pos);
                         }
                     }
                 }
                 // I need to validate last iteration of for loop!
-                break;
+                if (this.enemy_btn[pos].getBusy() == false) {
+                    System.out.println(pos + "sd");
+                    break;
+                }
+
+                else {
+                    initial_point = initialPoint();
+                    coordinates.clear();
+
+                }
             } catch (Exception e) {
                 coordinates.clear();
                 initial_point = initialPoint();
@@ -166,8 +175,10 @@ public class LogicProcessing {
 
             }
         }
-        // coordinates.add(initial_point);
-        for (int index = 0; index < coordinates.size(); index++) {
+        coordinates.add(pos);
+        for (
+
+                int index = 0; index < coordinates.size(); index++) {
             System.out.println(index);
             System.out.println(coordinates.get(index));
             this.enemy_btn[coordinates.get(index)].setBackground(new Color(255, 86, 74));
@@ -201,7 +212,7 @@ public class LogicProcessing {
 
         while (true) {
             try {
-                pos = initial_point - 10;
+                pos = initial_point;
                 for (int i = 0; i < length - 1; i++) {
                     if (this.enemy_btn[pos].getBusy() == false) {
                         coordinates.add(pos);
@@ -212,16 +223,22 @@ public class LogicProcessing {
                             i--;
                             coordinates.clear();
                             pos = initialPoint();
-                            coordinates.add(pos);
                         } else {
                             i -= i + 1;
                             coordinates.clear();
                             pos = initialPoint();
-                            coordinates.add(pos);
                         }
                     }
                 }
-                coordinates.add(initial_point);
+                if (this.enemy_btn[pos].getBusy() == false) {
+                    break;
+                }
+
+                else {
+                    initial_point = initialPoint();
+                    coordinates.clear();
+                }
+
                 break;
             } catch (Exception e) {
                 coordinates.clear();
@@ -230,7 +247,7 @@ public class LogicProcessing {
 
             }
         }
-
+        coordinates.add(pos);
         for (int i = 0; i < coordinates.size(); i++) {
             enemy_btn[coordinates.get(i)].setBusy();
         }
@@ -248,7 +265,11 @@ public class LogicProcessing {
         while (true) {
             try {
                 row = this.enemy_btn[pos].row;
-                break;
+                if (this.enemy_btn[pos].getBusy() == false) {
+                    break;
+                } else {
+                    pos = initialPoint();
+                }
             } catch (Exception e) {
                 pos = initialPoint();
             }

@@ -176,22 +176,24 @@ public class Graphics {
         // logic.down(-101, 5, true);
         // logic.right(-1, 3, true);
         // logic.left(1000, 3, true);
-        // logic.towardsTop(1002, 3, true);
-        logic.placeShip(73, 5, 2,
+        // logic.towardsTop(1002, 3, true);`
+        logic.placeShip(this.logic.initialPoint(), 5, 0,
                 logic.airCraftCarrier, true);
         System.out.println("AirCraft!");
-        logic.placeShip(80, 4, 1, logic.battleship,
+        logic.placeShip(this.logic
+                .initialPoint(), 4, 1, logic.battleship,
                 true);
-        // System.out.println("Battleship");
-        // logic.placeShip(logic.initialPoint(), 3, logic.direction(), logic.destroyer,
-        // true);
-        // System.out.println("Submarine");
-        // logic.placeShip(logic.initialPoint(), 3, logic.direction(), logic.submarine,
-        // true);
-        // System.out.println("Destroyer");
-        // logic.placeShip(logic.initialPoint(), 2, logic.direction(), logic.patrolBoat,
-        // true);
-        // System.out.println("Patrol Boat");
+        System.out.println("Battleship");
+        logic.placeShip(this.logic
+                .initialPoint(), 3, 2, logic.destroyer,
+                true);
+        System.out.println("Submarine");
+        logic.placeShip(this.logic
+                .initialPoint(), 3, 3, logic.submarine,
+                true);
+        System.out.println("Destroyer");
+        logic.placeShip(this.logic.initialPoint(), 2, 2, logic.patrolBoat, true);
+        System.out.println("Patrol Boat");
         // for (int i = 0; i < logic.airCraftCarrier.size(); i++) {
         // System.out.println("Array has: " + logic.airCraftCarrier.get(i));
         // }
