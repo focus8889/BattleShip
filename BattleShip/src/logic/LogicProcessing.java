@@ -38,11 +38,11 @@ public class LogicProcessing {
     public int radar = 4;
 
     // CPU.// Coordinates of the ships.
-    ArrayList<Integer> en_patrolBoat = new ArrayList<Integer>(2);
-    ArrayList<Integer> en_submarine = new ArrayList<Integer>(3);
-    ArrayList<Integer> en_destroyer = new ArrayList<Integer>(3);
-    ArrayList<Integer> en_battleship = new ArrayList<Integer>(4);
-    ArrayList<Integer> en_airCraftCarrier = new ArrayList<Integer>(5);
+    public ArrayList<Integer> en_patrolBoat = new ArrayList<Integer>(2);
+    public ArrayList<Integer> en_submarine = new ArrayList<Integer>(3);
+    public ArrayList<Integer> en_destroyer = new ArrayList<Integer>(3);
+    public ArrayList<Integer> en_battleship = new ArrayList<Integer>(4);
+    public ArrayList<Integer> en_airCraftCarrier = new ArrayList<Integer>(5);
     // Health points of ships.
     int en_patrol_boat_health = 2;
     int en_submarine_health = 3;
@@ -69,8 +69,9 @@ public class LogicProcessing {
                 btn.setID(id);
                 btn.row = i;
                 btn.setText(String.valueOf(btn.getId()));
-                btn.setVisible(true);
+
                 btn.setFont(new Font("Arial", Font.BOLD, 11));
+                btn.setBackground(new Color(0, 191, 255));
                 btn.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         dropRadar(btn.getId());
@@ -93,7 +94,9 @@ public class LogicProcessing {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 CustomButton btn = new CustomButton();
+                btn.setBackground(new Color(0, 191, 255));
                 btn.setID(id);
+                btn.row = i;
                 btn.setText(String.valueOf(btn.getId()));
                 btn.setFont(new Font("Arial", Font.BOLD, 11));
                 this.graphics.my_board.add(btn);
@@ -118,13 +121,13 @@ public class LogicProcessing {
         return initial_point;
     }
 
-    public ArrayList<Integer> down(int initial_point, int length, boolean flag) {
+    public ArrayList<Integer> down(int initial_point, int length, boolean flag, CustomButton[] cust_btn) {
         ArrayList<Integer> coordinates = new ArrayList<Integer>();
         System.out.println(initial_point + " of DOWN.");
         int pos;
         while (true) {
             try {
-                if (this.enemy_btn[initial_point].getBusy() == false) {
+                if (cust_btn[initial_point].getBusy() == false) {
                     break;
                 } else {
                     initial_point = initialPoint();
@@ -139,7 +142,7 @@ public class LogicProcessing {
             try {
                 pos = initial_point; // 50
                 for (int i = 0; i < length - 1; i++) {
-                    if (this.enemy_btn[pos].getBusy() == false) { // 1 -- false, 2 -- false,
+                    if (cust_btn[pos].getBusy() == false) { // 1 -- false, 2 -- false,
                         coordinates.add(pos); // [50, 60]
                         pos += 10;// 60, 70
                         System.out.println(pos);
@@ -158,7 +161,7 @@ public class LogicProcessing {
                     }
                 }
                 // I need to validate last iteration of for loop!
-                if (this.enemy_btn[pos].getBusy() == false) {
+                if (cust_btn[pos].getBusy() == false) {
                     System.out.println(pos + "sd");
                     break;
                 }
@@ -176,29 +179,28 @@ public class LogicProcessing {
             }
         }
         coordinates.add(pos);
-        for (
-
-                int index = 0; index < coordinates.size(); index++) {
+        for (int index = 0; index < coordinates.size(); index++) {
             System.out.println(index);
             System.out.println(coordinates.get(index));
-            this.enemy_btn[coordinates.get(index)].setBackground(new Color(255, 86, 74));
+            cust_btn[coordinates.get(index)].setBackground(new Color(255, 86, 74));
 
         }
         for (int i = 0; i < coordinates.size(); i++) {
-            enemy_btn[coordinates.get(i)].setBusy();
+            cust_btn[coordinates.get(i)].setBusy();
+            System.out.println(cust_btn[coordinates.get(i)].getBusy());
         }
 
         System.out.println("Further DOWN" + coordinates);
         return coordinates;
     }
 
-    public ArrayList<Integer> top(int initial_point, int length, boolean flag) {
+    public ArrayList<Integer> top(int initial_point, int length, boolean flag, CustomButton[] cust_btn) {
         ArrayList<Integer> coordinates = new ArrayList<Integer>();
         System.out.println(initial_point + " of UP.");
         int pos;
         while (true) {
             try {
-                if (this.enemy_btn[initial_point].getBusy() == false) {
+                if (cust_btn[initial_point].getBusy() == false) {
                     break;
                 } else {
                     initial_point = initialPoint();
@@ -214,7 +216,7 @@ public class LogicProcessing {
             try {
                 pos = initial_point;
                 for (int i = 0; i < length - 1; i++) {
-                    if (this.enemy_btn[pos].getBusy() == false) {
+                    if (cust_btn[pos].getBusy() == false) {
                         coordinates.add(pos);
                         pos -= 10;
                     } else {
@@ -230,7 +232,7 @@ public class LogicProcessing {
                         }
                     }
                 }
-                if (this.enemy_btn[pos].getBusy() == false) {
+                if (cust_btn[pos].getBusy() == false) {
                     break;
                 }
 
@@ -249,23 +251,23 @@ public class LogicProcessing {
         }
         coordinates.add(pos);
         for (int i = 0; i < coordinates.size(); i++) {
-            enemy_btn[coordinates.get(i)].setBusy();
+            cust_btn[coordinates.get(i)].setBusy();
         }
         for (int index = 0; index < coordinates.size(); index++) {
-            this.enemy_btn[coordinates.get(index)].setBackground(new Color(250, 252, 96));
+            cust_btn[coordinates.get(index)].setBackground(new Color(250, 252, 96));
         }
         System.out.println("Further down " + coordinates);
         return coordinates;
     }
 
-    public ArrayList<Integer> right(int initial_point, int length, boolean flag) {
+    public ArrayList<Integer> right(int initial_point, int length, boolean flag, CustomButton[] cust_btn) {
         ArrayList<Integer> coordinates = new ArrayList<Integer>();
         int pos = initial_point;
         int row;
         while (true) {
             try {
-                row = this.enemy_btn[pos].row;
-                if (this.enemy_btn[pos].getBusy() == false) {
+                row = cust_btn[pos].row;
+                if (cust_btn[pos].getBusy() == false) {
                     break;
                 } else {
                     pos = initialPoint();
@@ -278,11 +280,11 @@ public class LogicProcessing {
             // Checking if initital point of cell is not to small.
             // In order to prevent errors.
             try {
-                if ((pos > length) & (this.enemy_btn[initial_point].getBusy() == false)) {
+                if ((pos > length) & (cust_btn[initial_point].getBusy() == false)) {
                     coordinates.add(pos);
                     for (int i = 0; i < length - 1; i++) {
                         pos++;
-                        if ((this.enemy_btn[pos].row == row) & (this.enemy_btn[pos].getBusy() == false)) {
+                        if ((cust_btn[pos].row == row) & (cust_btn[pos].getBusy() == false)) {
                             coordinates.add(pos);
                             continue;
                         } else {
@@ -291,13 +293,13 @@ public class LogicProcessing {
                                 i--;
                                 coordinates.clear();
                                 pos = initialPoint();
-                                row = this.enemy_btn[pos].row;
+                                row = cust_btn[pos].row;
                                 coordinates.add(pos);
                             } else {
                                 i -= i + 1;
                                 coordinates.clear();
                                 pos = initialPoint();
-                                row = this.enemy_btn[pos].row;
+                                row = cust_btn[pos].row;
                                 coordinates.add(pos);
                             }
                         }
@@ -307,37 +309,43 @@ public class LogicProcessing {
                     coordinates.clear();
                     initial_point = initialPoint();
                     pos = initial_point;
-                    row = this.enemy_btn[pos].row;
+                    row = cust_btn[pos].row;
                     continue;
                 }
             } catch (Exception e) {
                 coordinates.clear();
                 pos = initialPoint();
-                row = this.enemy_btn[pos].row;
+                row = cust_btn[pos].row;
                 continue;
             }
         }
         // Setting cell to busy.
         for (int i = 0; i < coordinates.size(); i++) {
-            enemy_btn[coordinates.get(i)].setBusy();
+            cust_btn[coordinates.get(i)].setBusy();
 
         }
         for (int index = 0; index < coordinates.size(); index++) {
-            this.enemy_btn[coordinates.get(index)].setBackground(new Color(119, 247, 204));
+            cust_btn[coordinates.get(index)].setBackground(new Color(119, 247, 204));
         }
         System.out.println("This is right coordinates: " + coordinates);
         return coordinates;
     }
 
-    public ArrayList<Integer> left(int initial_point, int length, boolean flag) {
+    public ArrayList<Integer> left(int initial_point, int length, boolean flag, CustomButton[] cust_btn) {
         ArrayList<Integer> coordinates = new ArrayList<Integer>();
         int pos = initial_point;
         int row;
+        System.out.println(coordinates);
         while (true) {
             try {
-                // Checking if the button is not of index boundries.
-                row = this.enemy_btn[pos].row;
-                break;
+                row = cust_btn[pos].row;
+                System.out.println(cust_btn[pos].getBusy() + "ZZZZZZZZZZZZZZZ");
+                if (cust_btn[pos].getBusy() == false) {
+                    System.out.println(cust_btn[pos].getBusy());
+                    break;
+                } else {
+                    pos = initialPoint();
+                }
             } catch (Exception e) {
                 pos = initialPoint();
             }
@@ -346,11 +354,11 @@ public class LogicProcessing {
             // Checking if initital point of cell is not to small.
             // In order to prevent errors.
             try {
-                if ((pos > length) & (this.enemy_btn[initial_point].getBusy() == false)) {
+                if ((pos > length) & (cust_btn[initial_point].getBusy() == false)) {
                     coordinates.add(pos);
                     for (int i = 0; i < length - 1; i++) {
                         pos--;
-                        if ((this.enemy_btn[pos].row == row) & (this.enemy_btn[pos].getBusy() == false)) {
+                        if ((cust_btn[pos].row == row) & (cust_btn[pos].getBusy() == false)) {
                             coordinates.add(pos);
                             continue;
                         } else {
@@ -358,13 +366,13 @@ public class LogicProcessing {
                                 i--;
                                 coordinates.clear();
                                 pos = initialPoint();
-                                row = this.enemy_btn[pos].row;
+                                row = cust_btn[pos].row;
                                 coordinates.add(pos);
                             } else {
                                 i -= i + 1;
                                 coordinates.clear();
                                 pos = initialPoint();
-                                row = this.enemy_btn[pos].row;
+                                row = cust_btn[pos].row;
                                 coordinates.add(pos);
                             }
                         }
@@ -378,41 +386,44 @@ public class LogicProcessing {
                     coordinates.clear();
                     initial_point = initialPoint();
                     pos = initial_point;
-                    row = this.enemy_btn[pos].row;
+                    row = cust_btn[pos].row;
                     continue;
                 }
             } catch (Exception e) {
                 coordinates.clear();
                 pos = initialPoint();
-                row = this.enemy_btn[pos].row;
+                row = cust_btn[pos].row;
                 continue;
             }
         }
         for (int i = 0; i < coordinates.size(); i++) {
-            enemy_btn[coordinates.get(i)].setBusy();
+            cust_btn[coordinates.get(i)].setBusy();
         }
         for (int index = 0; index < coordinates.size(); index++) {
-            this.enemy_btn[coordinates.get(index)].setBackground(new Color(130, 143, 255));
+            cust_btn[coordinates.get(index)].setBackground(new Color(130, 143, 255));
         }
         System.out.println("This is right left: " + coordinates);
         return coordinates;
 
     }
 
-    public void placeShip(int initial_point, int length, int direction, ArrayList<Integer> coordinates, boolean flag) {
+    public ArrayList<Integer> placeShip(int initial_point, int length, int direction,
+            boolean flag,
+            CustomButton[] cust_btn) {
         // 0 goes to top.
         if (direction == 0) {
-            top(initial_point, length, flag);
+            return top(initial_point, length, flag, cust_btn);
         }
         if (direction == 1) {
-            down(initial_point, length, flag);
+            return down(initial_point, length, flag, cust_btn);
         }
         if (direction == 2) {
-            right(initial_point, length, flag);
+            return right(initial_point, length, flag, cust_btn);
         }
         if (direction == 3) {
-            left(initial_point, length, flag);
+            return left(initial_point, length, flag, cust_btn);
         }
+        return null;
     }
 
     public void dropRadar(int clickedButton) {
@@ -428,7 +439,7 @@ public class LogicProcessing {
                 try {
                     clickedButton -= radarArea.get(i);
                     coordinates.add(clickedButton);
-                    this.enemy_btn[clickedButton].setBackground(Color.RED);
+                    enemy_btn[clickedButton].setBackground(Color.RED);
                     clickedButton = per;
                 } catch (Exception e) {
                     continue;
@@ -438,7 +449,7 @@ public class LogicProcessing {
                 try {
                     clickedButton += radarArea.get(i);
                     coordinates.add(clickedButton);
-                    this.enemy_btn[clickedButton].setBackground(Color.RED);
+                    enemy_btn[clickedButton].setBackground(Color.RED);
                     clickedButton = per;
                 } catch (Exception e) {
                     continue;
@@ -452,7 +463,7 @@ public class LogicProcessing {
         this.enemyOccupied.add(1);
         for (int i = 0; i < this.enemyOccupied.size(); i++) {
             if (coordinate == this.enemyOccupied.get(i)) {
-                this.enemy_btn[this.enemyOccupied.get(i)].setText("H");
+                enemy_btn[this.enemyOccupied.get(i)].setText("H");
             }
         }
     }

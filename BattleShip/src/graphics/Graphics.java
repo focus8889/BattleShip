@@ -170,38 +170,47 @@ public class Graphics {
         logic.enemyBoardGenerate();
         logic.myBoardGenerate();
 
-        // logic.down(48, 2, true);
-        // logic.down(48, 2, true);
-        // logic.down(48, 2, true);
-        // logic.down(-101, 5, true);
-        // logic.right(-1, 3, true);
-        // logic.left(1000, 3, true);
-        // logic.towardsTop(1002, 3, true);`
-        logic.placeShip(this.logic.initialPoint(), 5, 0,
-                logic.airCraftCarrier, true);
-        System.out.println("AirCraft!");
-        logic.placeShip(this.logic
-                .initialPoint(), 4, 1, logic.battleship,
-                true);
-        System.out.println("Battleship");
-        logic.placeShip(this.logic
-                .initialPoint(), 3, 2, logic.destroyer,
-                true);
-        System.out.println("Submarine");
-        logic.placeShip(this.logic
-                .initialPoint(), 3, 3, logic.submarine,
-                true);
-        System.out.println("Destroyer");
-        logic.placeShip(this.logic.initialPoint(), 2, 2, logic.patrolBoat, true);
-        System.out.println("Patrol Boat");
-        // for (int i = 0; i < logic.airCraftCarrier.size(); i++) {
-        // System.out.println("Array has: " + logic.airCraftCarrier.get(i));
-        // }
-        // System.out.println("Dddddd");
-        // for (int i = 0; i < player.airCraftCarrier.size(); i++) {
-        // int id = player.airCraftCarrier.get(i);
-        // logic.my_btn[id].setBackground(Color.RED);
-        // player.print();
-        // }
+        // Placing Ships.
+
+        // Placing CPU ships.
+
+        this.logic.en_airCraftCarrier = this.logic.placeShip(this.logic.initialPoint(), 5, this.logic
+                .direction(), true,
+                this.logic.enemy_btn);
+        this.logic.en_battleship = this.logic.placeShip(this.logic.initialPoint(), 4, this.logic.direction(), true,
+                this.logic.enemy_btn);
+        this.logic.en_submarine = this.logic.placeShip(this.logic.initialPoint(), 3, this.logic.direction(), true,
+                this.logic.enemy_btn);
+        this.logic.en_destroyer = this.logic.placeShip(this.logic.initialPoint(), 3, this.logic.direction(), true,
+                this.logic.enemy_btn);
+        this.logic.en_patrolBoat = this.logic.placeShip(this.logic.initialPoint(), 2, this.logic.direction(), true,
+                this.logic.enemy_btn);
+        System.out.println(this.logic.en_airCraftCarrier + "ASDASDASD");
+        System.out.println(this.logic.en_battleship + "ASDASDASD");
+        System.out.println(this.logic.en_submarine + "ASDASDASD");
+        System.out.println(this.logic.en_destroyer + "ASDASDASD");
+        System.out.println(this.logic.en_patrolBoat + "ASDASDASD");
+        System.out.println("STOP");
+        System.out.println("STOP");
+        System.out.println("STOP");
+        System.out.println("STOP");
+        System.out.println("STOP");
+        this.logic.airCraftCarrier = this.logic.placeShip(this.logic.initialPoint(), 5,
+                this.logic.direction(), true, this.logic.my_btn);
+        this.logic.battleship = this.logic.placeShip(this.logic.initialPoint(), 4,
+                this.logic.direction(), true, this.logic.my_btn);
+        this.logic.submarine = this.logic.placeShip(this.logic.initialPoint(), 3,
+                this.logic.direction(), true, this.logic.my_btn);
+        this.logic.destroyer = this.logic.placeShip(this.logic.initialPoint(), 3,
+                this.logic.direction(), true, this.logic.my_btn);
+        this.logic.patrolBoat = this.logic.placeShip(this.logic.initialPoint(), 2,
+                this.logic.direction(), true, this.logic.my_btn);
+        System.out.println(this.logic.airCraftCarrier + "ASDASDASD");
+        System.out.println(this.logic.battleship + "ASDASDASD");
+        System.out.println(this.logic.submarine + "ASDASDASD");
+        System.out.println(this.logic.destroyer + "ASDASDASD");
+        System.out.println(this.logic.patrolBoat + "ASDASDASD");
+
+        // Placing Player ships
     }
 }
