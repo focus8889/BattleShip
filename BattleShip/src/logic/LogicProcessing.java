@@ -10,7 +10,7 @@ import graphics.Graphics;
 
 public class LogicProcessing {
     Graphics graphics;
-    ArrayList<Integer> enemy_coordinates = new ArrayList<Integer>();
+    // ArrayList<Integer> enemy_coordinates = new ArrayList<Integer>();
     public CustomButton enemy_btn[] = new CustomButton[101];
     public CustomButton my_btn[] = new CustomButton[101];
 
@@ -27,6 +27,7 @@ public class LogicProcessing {
 
     // Enemy occupied coordinates.
     public ArrayList<Integer> enemyOccupied = new ArrayList<Integer>();
+    public ArrayList<Integer> playerOccupied = new ArrayList<Integer>();
     // Health points of ships.
     public int patrol_boat_health = 2;
     public int submarine_health = 3;
@@ -74,9 +75,13 @@ public class LogicProcessing {
                 btn.setBackground(new Color(0, 191, 255));
                 btn.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        dropRadar(btn.getId());
+                        // dropRadar(btn.getId());
+                        shootController(btn.getId(), false);
+                        shoot(btn.getId());
                         System.out.println("This button's row is " + btn.row);
                         System.out.println("This button busy equal to " + btn.getBusy());
+                        // graphics.winnerPanel();
+
                     }
                 });
                 this.graphics.enemy_board.add(btn);
@@ -460,10 +465,13 @@ public class LogicProcessing {
     }
 
     private void shoot(int coordinate) {
-        this.enemyOccupied.add(1);
         for (int i = 0; i < this.enemyOccupied.size(); i++) {
+            System.out.println(this.enemyOccupied + " Occupied!");
+            System.out.println(coordinate + "Coordinates!");
             if (coordinate == this.enemyOccupied.get(i)) {
-                enemy_btn[this.enemyOccupied.get(i)].setText("H");
+                this.enemy_btn[coordinate].setText("H");
+            } else {
+                this.enemy_btn[coordinate].setText("M");
             }
         }
     }
@@ -476,17 +484,108 @@ public class LogicProcessing {
         }
     }
 
-    public void cpuMove(boolean flag) {
-        if (flag == true) {
-            while (true) {
+    public void cpuMove() {
+        while (true) {
+            try {
                 int shoot = initialPoint();
-                if (!this.enemyOccupied.contains(shoot)) {
-                    this.my_btn[shoot].setBackground(Color.red);
+                if (this.playerOccupied.contains(shoot)) {
+                    this.my_btn[shoot].setText("H");
+                    checkMyArrays(shoot);
                     break;
                 } else {
-                    continue;
+                    this.my_btn[shoot].setText("M");
+                    break;
                 }
+            } catch (Exception e) {
+                continue;
             }
+
+        }
+    }
+
+    public void shootController(int cell, boolean flag) {
+        if (flag == true) {
+            shoot(this.enemy_btn[cell].getId());
+            flag = false;
+            for (int i = 0; i < this.enemy_btn.length; i++) {
+                this.enemy_btn[i].setEnabled(false);
+            }
+        }
+        if (flag == false) {
+            cpuMove();
+            flag = true;
+        }
+    }
+
+    public void checkEnemyArrays(int coordinate) {
+        for (int i = 0; i < this.en_airCraftCarrier.size(); i++) {
+            if (this.en_airCraftCarrier.get(i) == coordinate) {
+                this.en_airCraftCarrier_health--;
+                System.out.println(this.en_airCraftCarrier_health + " current health!");
+            }
+        }
+        for (int i = 0; i < this.en_battleship.size(); i++) {
+            if (this.en_battleship.get(i) == coordinate) {
+                this.en_battleship_health--;
+                System.out.println(this.en_battleship_health + " current health!");
+            }
+        }
+        for (int i = 0; i < this.en_destroyer.size(); i++) {
+            if (this.en_destroyer.get(i) == coordinate) {
+                this.en_destroyer_health--;
+                System.out.println(this.en_destroyer_health + " current health!");
+            }
+        }
+        for (int i = 0; i < this.en_submarine.size(); i++) {
+            if (this.en_submarine.get(i) == coordinate) {
+                this.en_submarine_health--;
+                System.out.println(this.en_submarine_health + " current health!");
+            }
+        }
+        for (int i = 0; i < this.en_patrolBoat.size(); i++) {
+            if (this.en_patrolBoat.get(i) == coordinate) {
+                this.en_patrol_boat_health--;
+                System.out.println(this.en_patrol_boat_health + " current health!");
+            }
+        }
+    }
+
+    public void checkMyArrays(int coordinate) {
+        for (int i = 0; i < this.airCraftCarrier.size(); i++) {
+            if (this.airCraftCarrier.get(i) == coordinate) {
+                this.airCraftCarrier_health--;
+                System.out.println(this.airCraftCarrier_health + " current health!");
+            }
+        }
+        for (int i = 0; i < this.battleship.size(); i++) {
+            if (this.battleship.get(i) == coordinate) {
+                this.battleship_health--;
+                System.out.println(this.battleship_health + " current health!");
+            }
+        }
+        for (int i = 0; i < this.destroyer.size(); i++) {
+            if (this.destroyer.get(i) == coordinate) {
+                this.destroyer_health--;
+                System.out.println(this.destroyer_health + " current health!");
+            }
+        }
+        for (int i = 0; i < this.submarine.size(); i++) {
+            if (this.submarine.get(i) == coordinate) {
+                this.submarine_health--;
+                System.out.println(this.submarine_health + " current health!");
+            }
+        }
+        for (int i = 0; i < this.patrolBoat.size(); i++) {
+            if (this.patrolBoat.get(i) == coordinate) {
+                this.patrol_boat_health--;
+                System.out.println(this.patrol_boat_health + " current health!");
+            }
+        }
+    }
+
+    public void iterate(ArrayList<Integer> array, ArrayList<Integer> coordinates) {
+        for (int i = 0; i < array.size(); i++) {
+            coordinates.add(array.get(i));
         }
     }
 }
