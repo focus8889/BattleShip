@@ -43,7 +43,8 @@ public class Graphics {
         public JLabel l_radars = new JLabel("4");
         public JLabel l_hit = new JLabel("H");
         public JLabel l_miss = new JLabel("M");
-        public JLabel l_sunk = new JLabel("S");
+        public JLabel l_sunk = new JLabel();
+        public JLabel l_alive = new JLabel();
 
         // Game buttons.
         public JButton b_about = new JButton("About");
@@ -138,7 +139,7 @@ public class Graphics {
                 my_board.setBounds(50, 50, 520, 300);
                 b_radar.setBounds(580, 50, 100, 30);
                 l_score.setBounds(580, 100, 100, 50);
-                l_score.setFont(new Font("Arial", Font.BOLD, 22));
+                l_score.setFont(new Font("Arial", Font.BOLD, 16));
                 l_score.setText(score);
 
                 // // Additional configuration for panels.

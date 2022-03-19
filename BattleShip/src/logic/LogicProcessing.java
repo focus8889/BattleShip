@@ -490,7 +490,11 @@ public class LogicProcessing {
             checkEnemyArrays(coordinate);
         } else {
             this.enemy_btn[coordinate].setText("M");
+            this.score--;
+
         }
+        score_dis = "Score: " + this.score;
+        this.graphics.l_score.setText(score_dis);
     }
 
     public void cpuMove() {
