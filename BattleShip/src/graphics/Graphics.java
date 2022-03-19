@@ -122,17 +122,24 @@ public class Graphics {
                 main_panel.setVisible(false);
                 frame.remove(main_panel);
 
+                // Displaying player score.
+                String score = "Score: " + this.logic.score;
+
                 // // Initializing game panel components.
                 frame.add(game_panel);
                 game_panel.add(enemy_board);
                 game_panel.add(my_board);
                 game_panel.add(b_radar);
+                game_panel.add(l_score);
 
                 // // Setting bounds of game panel elements.
                 game_panel.setBounds(0, 0, 800, 800);
                 enemy_board.setBounds(50, 400, 520, 300);
                 my_board.setBounds(50, 50, 520, 300);
                 b_radar.setBounds(580, 50, 100, 30);
+                l_score.setBounds(580, 100, 100, 50);
+                l_score.setFont(new Font("Arial", Font.BOLD, 22));
+                l_score.setText(score);
 
                 // // Additional configuration for panels.
                 my_board.setLayout(new GridLayout(10, 10));

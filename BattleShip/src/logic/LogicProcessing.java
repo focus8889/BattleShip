@@ -38,12 +38,23 @@ public class LogicProcessing {
     // Radar quantity.
     public int radar = 4;
 
+    // Total quantity of ships.
+    public int playerTotalShips = 5;
+    public int cpuTotalShips = 5;
+
+    // Player score.
+    public int score = 0;
+    String score_dis = "Score: " + this.score;
+
     // CPU.// Coordinates of the ships.
     public ArrayList<Integer> en_patrolBoat = new ArrayList<Integer>(2);
     public ArrayList<Integer> en_submarine = new ArrayList<Integer>(3);
     public ArrayList<Integer> en_destroyer = new ArrayList<Integer>(3);
     public ArrayList<Integer> en_battleship = new ArrayList<Integer>(4);
     public ArrayList<Integer> en_airCraftCarrier = new ArrayList<Integer>(5);
+
+    // Attacked coordinates
+    public ArrayList<Integer> en_attacked = new ArrayList<Integer>();
     // Health points of ships.
     int en_patrol_boat_health = 2;
     int en_submarine_health = 3;
@@ -67,20 +78,21 @@ public class LogicProcessing {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 CustomButton btn = new CustomButton();
+                btn.setFocusPainted(false);
                 btn.setID(id);
                 btn.row = i;
                 btn.setText(String.valueOf(btn.getId()));
-
                 btn.setFont(new Font("Arial", Font.BOLD, 11));
                 btn.setBackground(new Color(0, 191, 255));
                 btn.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
+                        shootController(btn.getId(), true);
+                        btn.setEnabled(false);
+                        checkGameStatus();
                         // dropRadar(btn.getId());
-                        shootController(btn.getId(), false);
-                        shoot(btn.getId());
                         System.out.println("This button's row is " + btn.row);
                         System.out.println("This button busy equal to " + btn.getBusy());
-                        // graphics.winnerPanel();
+                        System.out.println(score);
 
                     }
                 });
@@ -88,7 +100,6 @@ public class LogicProcessing {
                 this.enemy_btn[btn.getId()] = btn;
                 id++;
             }
-
         }
         System.out.println("Done");
     }
@@ -99,6 +110,7 @@ public class LogicProcessing {
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 CustomButton btn = new CustomButton();
+                btn.setFocusPainted(false);
                 btn.setBackground(new Color(0, 191, 255));
                 btn.setID(id);
                 btn.row = i;
@@ -107,7 +119,6 @@ public class LogicProcessing {
                 this.graphics.my_board.add(btn);
                 this.my_btn[btn.getId()] = btn;
                 id++;
-
             }
 
         }
@@ -141,18 +152,16 @@ public class LogicProcessing {
                 initial_point = initialPoint();
                 continue;
             }
-
         }
         while (true) {
             try {
-                pos = initial_point; // 50
+                pos = initial_point;
                 for (int i = 0; i < length - 1; i++) {
-                    if (cust_btn[pos].getBusy() == false) { // 1 -- false, 2 -- false,
-                        coordinates.add(pos); // [50, 60]
-                        pos += 10;// 60, 70
+                    if (cust_btn[pos].getBusy() == false) {
+                        coordinates.add(pos);
+                        pos += 10;
                         System.out.println(pos);
                     } else {
-
                         // It gets index of I to -1, which lets to restart for loop.
                         if (i == 0) {
                             i--;
@@ -384,10 +393,6 @@ public class LogicProcessing {
                     }
                     break;
                 } else {
-                    ////
-                    //// CHECK CHECK CHECK
-                    //// IF ANY ERROR!
-
                     coordinates.clear();
                     initial_point = initialPoint();
                     pos = initial_point;
@@ -438,49 +443,53 @@ public class LogicProcessing {
         radarArea.add(10);
         radarArea.add(9);
         radarArea.add(1);
+        String cont = String.valueOf(clickedButton);
         int per = clickedButton;
-        while (true) {
-            for (int i = 0; i < radarArea.size(); i++) {
-                try {
-                    clickedButton -= radarArea.get(i);
-                    coordinates.add(clickedButton);
-                    enemy_btn[clickedButton].setBackground(Color.RED);
-                    clickedButton = per;
-                } catch (Exception e) {
-                    continue;
+        if (clickedButton < 90) {
+            try {
+                if (this.radar > 0) {
+                    if ((cont.length() == 2) & (cont.charAt(1) != '0') & (cont.charAt(1) != '1')) {
+                        coordinates.add(clickedButton);
+                        for (int i = 0; i < radarArea.size(); i++) {
+                            try {
+                                clickedButton += radarArea.get(i);
+                                coordinates.add(clickedButton);
+                                clickedButton = per;
+                            } catch (Exception e) {
+                            }
+                        }
+                        for (int i = 0; i < radarArea.size(); i++) {
+                            try {
+                                clickedButton -= radarArea.get(i);
+                                coordinates.add(clickedButton);
+                                clickedButton = per;
+                            } catch (Exception e) {
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+
+            }
+            for (int i = 0; i < coordinates.size(); i++) {
+                if (this.enemyOccupied.contains(coordinates.get(i))) {
+                    this.enemy_btn[coordinates.get(i)].setBackground(Color.red);
+                } else {
+                    this.enemy_btn[coordinates.get(i)].setBackground(Color.green);
                 }
             }
-            for (int i = 0; i < radarArea.size(); i++) {
-                try {
-                    clickedButton += radarArea.get(i);
-                    coordinates.add(clickedButton);
-                    enemy_btn[clickedButton].setBackground(Color.RED);
-                    clickedButton = per;
-                } catch (Exception e) {
-                    continue;
-                }
-            }
-            break;
+
+            System.out.println(coordinates);
         }
+
     }
 
-    private void shoot(int coordinate) {
-        for (int i = 0; i < this.enemyOccupied.size(); i++) {
-            System.out.println(this.enemyOccupied + " Occupied!");
-            System.out.println(coordinate + "Coordinates!");
-            if (coordinate == this.enemyOccupied.get(i)) {
-                this.enemy_btn[coordinate].setText("H");
-            } else {
-                this.enemy_btn[coordinate].setText("M");
-            }
-        }
-    }
-
-    private void check(int cell) {
-        if (graphics.b_radar.isSelected()) {
-            dropRadar(cell);
+    public void shoot(int coordinate) {
+        if (this.enemyOccupied.contains(coordinate)) {
+            this.enemy_btn[coordinate].setText("H");
+            checkEnemyArrays(coordinate);
         } else {
-            shoot(cell);
+            this.enemy_btn[coordinate].setText("M");
         }
     }
 
@@ -488,13 +497,17 @@ public class LogicProcessing {
         while (true) {
             try {
                 int shoot = initialPoint();
-                if (this.playerOccupied.contains(shoot)) {
-                    this.my_btn[shoot].setText("H");
-                    checkMyArrays(shoot);
-                    break;
-                } else {
-                    this.my_btn[shoot].setText("M");
-                    break;
+                if (!this.en_attacked.contains(shoot)) {
+                    if (this.playerOccupied.contains(shoot)) {
+                        this.my_btn[shoot].setText("H");
+                        checkMyArrays(shoot);
+                        this.en_attacked.add(shoot);
+                        break;
+                    } else {
+                        this.my_btn[shoot].setText("M");
+                        this.en_attacked.add(shoot);
+                        break;
+                    }
                 }
             } catch (Exception e) {
                 continue;
@@ -504,88 +517,137 @@ public class LogicProcessing {
     }
 
     public void shootController(int cell, boolean flag) {
+        if ((flag == true) & (this.graphics.b_radar.isSelected()) & (this.radar != 0)) {
+            dropRadar(cell);
+            this.radar--;
+        }
         if (flag == true) {
             shoot(this.enemy_btn[cell].getId());
             flag = false;
-            for (int i = 0; i < this.enemy_btn.length; i++) {
-                this.enemy_btn[i].setEnabled(false);
-            }
         }
         if (flag == false) {
             cpuMove();
             flag = true;
         }
+        System.out.println(this.graphics.b_radar.isSelected());
     }
 
     public void checkEnemyArrays(int coordinate) {
-        for (int i = 0; i < this.en_airCraftCarrier.size(); i++) {
-            if (this.en_airCraftCarrier.get(i) == coordinate) {
-                this.en_airCraftCarrier_health--;
-                System.out.println(this.en_airCraftCarrier_health + " current health!");
+
+        if (this.en_airCraftCarrier.contains(coordinate)) {
+            this.en_airCraftCarrier_health--;
+            this.score++;
+            System.out.println(this.en_airCraftCarrier_health + " current health!");
+            if (this.en_airCraftCarrier_health == 0) {
+                this.cpuTotalShips--;
+                System.out.println("Total cpu ships " + this.cpuTotalShips);
+                this.score += 10;
+            }
+
+        }
+        if (this.en_battleship.contains(coordinate)) {
+            this.en_battleship_health--;
+            this.score++;
+            System.out.println(this.en_battleship_health + " current health!");
+            if (this.en_battleship_health == 0) {
+                this.cpuTotalShips--;
+                System.out.println("Total cpu ships " + this.cpuTotalShips);
+                this.score += 8;
             }
         }
-        for (int i = 0; i < this.en_battleship.size(); i++) {
-            if (this.en_battleship.get(i) == coordinate) {
-                this.en_battleship_health--;
-                System.out.println(this.en_battleship_health + " current health!");
+        if (this.en_destroyer.contains(coordinate)) {
+            this.en_destroyer_health--;
+            this.score++;
+            System.out.println(this.en_destroyer_health + " current health!");
+            if (this.en_destroyer_health == 0) {
+                this.cpuTotalShips--;
+                this.score += 6;
+                System.out.println("Total cpu ships " + this.cpuTotalShips);
             }
         }
-        for (int i = 0; i < this.en_destroyer.size(); i++) {
-            if (this.en_destroyer.get(i) == coordinate) {
-                this.en_destroyer_health--;
-                System.out.println(this.en_destroyer_health + " current health!");
+        if (this.en_submarine.contains(coordinate)) {
+            this.en_submarine_health--;
+            this.score++;
+            System.out.println(this.en_patrol_boat_health + " current health!");
+            if (this.en_submarine_health == 0) {
+                this.cpuTotalShips--;
+                this.score += 6;
+                System.out.println("Total cpu ships " + this.cpuTotalShips);
             }
         }
-        for (int i = 0; i < this.en_submarine.size(); i++) {
-            if (this.en_submarine.get(i) == coordinate) {
-                this.en_submarine_health--;
-                System.out.println(this.en_submarine_health + " current health!");
+        if (this.en_patrolBoat.contains(coordinate)) {
+            this.en_patrol_boat_health--;
+            this.score++;
+            System.out.println(this.en_patrol_boat_health + " current health!");
+            if (this.en_patrol_boat_health == 0) {
+                this.cpuTotalShips--;
+                this.score += 4;
+                System.out.println("Total cpu ships " + this.cpuTotalShips);
             }
         }
-        for (int i = 0; i < this.en_patrolBoat.size(); i++) {
-            if (this.en_patrolBoat.get(i) == coordinate) {
-                this.en_patrol_boat_health--;
-                System.out.println(this.en_patrol_boat_health + " current health!");
-            }
-        }
+        score_dis = "Score: " + this.score;
+        this.graphics.l_score.setText(score_dis);
     }
 
     public void checkMyArrays(int coordinate) {
-        for (int i = 0; i < this.airCraftCarrier.size(); i++) {
-            if (this.airCraftCarrier.get(i) == coordinate) {
-                this.airCraftCarrier_health--;
-                System.out.println(this.airCraftCarrier_health + " current health!");
+        if (this.airCraftCarrier.contains(coordinate)) {
+            this.airCraftCarrier_health--;
+            this.score--;
+            System.out.println(this.airCraftCarrier_health + " current health!");
+            if (this.airCraftCarrier_health == 0) {
+                this.playerTotalShips--;
             }
         }
-        for (int i = 0; i < this.battleship.size(); i++) {
-            if (this.battleship.get(i) == coordinate) {
-                this.battleship_health--;
-                System.out.println(this.battleship_health + " current health!");
+        if (this.battleship.contains(coordinate)) {
+            this.battleship_health--;
+            this.score--;
+            System.out.println(this.battleship_health + " current health!");
+            if (this.battleship_health == 0) {
+                this.playerTotalShips--;
             }
         }
-        for (int i = 0; i < this.destroyer.size(); i++) {
-            if (this.destroyer.get(i) == coordinate) {
-                this.destroyer_health--;
-                System.out.println(this.destroyer_health + " current health!");
+        if (this.destroyer.contains(coordinate)) {
+            this.destroyer_health--;
+            this.score--;
+            System.out.println(this.destroyer_health + " current health!");
+            if (this.destroyer_health == 0) {
+                this.playerTotalShips--;
             }
         }
-        for (int i = 0; i < this.submarine.size(); i++) {
-            if (this.submarine.get(i) == coordinate) {
-                this.submarine_health--;
-                System.out.println(this.submarine_health + " current health!");
+        if (this.submarine.contains(coordinate)) {
+            this.submarine_health--;
+            this.score--;
+            System.out.println(this.submarine_health + " current health!");
+            if (this.submarine_health == 0) {
+                this.playerTotalShips--;
             }
         }
-        for (int i = 0; i < this.patrolBoat.size(); i++) {
-            if (this.patrolBoat.get(i) == coordinate) {
-                this.patrol_boat_health--;
-                System.out.println(this.patrol_boat_health + " current health!");
+        if (this.patrolBoat.contains(coordinate)) {
+            this.patrol_boat_health--;
+            this.score--;
+            System.out.println(this.patrol_boat_health + " current health!");
+            if (this.patrol_boat_health == 0) {
+                this.playerTotalShips--;
             }
         }
+        score_dis = "Score: " + this.score;
+        this.graphics.l_score.setText(score_dis);
     }
 
     public void iterate(ArrayList<Integer> array, ArrayList<Integer> coordinates) {
         for (int i = 0; i < array.size(); i++) {
             coordinates.add(array.get(i));
+        }
+    }
+
+    public void checkGameStatus() {
+        if (this.cpuTotalShips == 0) {
+            this.graphics.winnerPanel();
+            System.out.println("Player won!");
+        }
+        if (this.playerTotalShips == 0) {
+            this.graphics.winnerPanel();
+            System.out.println("CPU won!");
         }
     }
 }
