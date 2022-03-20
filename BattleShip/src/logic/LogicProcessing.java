@@ -73,7 +73,6 @@ public class LogicProcessing {
 
     // Generating Enemy Board.
     public void enemyBoardGenerate() {
-        System.out.println("Created");
         id = 1;
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
@@ -89,10 +88,6 @@ public class LogicProcessing {
                         shootController(btn.getId(), true);
                         btn.setEnabled(false);
                         checkGameStatus();
-                        // dropRadar(btn.getId());
-                        System.out.println("This button's row is " + btn.row);
-                        System.out.println("This button busy equal to " + btn.getBusy());
-                        System.out.println(score);
 
                     }
                 });
@@ -101,7 +96,6 @@ public class LogicProcessing {
                 id++;
             }
         }
-        System.out.println("Done");
     }
 
     // Generating Player board.
@@ -126,20 +120,17 @@ public class LogicProcessing {
 
     public int direction() {
         int direct = (int) (Math.random() * direction_range) + 0;
-        System.out.println("Direction : " + direct);
         return direct;
 
     }
 
     public int initialPoint() {
         int initial_point = (int) (Math.random() * initial_point_range) + 1;
-        System.out.println("Initial Point : " + initial_point);
         return initial_point;
     }
 
     public ArrayList<Integer> down(int initial_point, int length, boolean flag, CustomButton[] cust_btn) {
         ArrayList<Integer> coordinates = new ArrayList<Integer>();
-        System.out.println(initial_point + " of DOWN.");
         int pos;
         while (true) {
             try {
@@ -160,7 +151,7 @@ public class LogicProcessing {
                     if (cust_btn[pos].getBusy() == false) {
                         coordinates.add(pos);
                         pos += 10;
-                        System.out.println(pos);
+
                     } else {
                         // It gets index of I to -1, which lets to restart for loop.
                         if (i == 0) {
@@ -176,7 +167,6 @@ public class LogicProcessing {
                 }
                 // I need to validate last iteration of for loop!
                 if (cust_btn[pos].getBusy() == false) {
-                    System.out.println(pos + "sd");
                     break;
                 }
 
@@ -194,23 +184,21 @@ public class LogicProcessing {
         }
         coordinates.add(pos);
         for (int index = 0; index < coordinates.size(); index++) {
-            System.out.println(index);
-            System.out.println(coordinates.get(index));
-            cust_btn[coordinates.get(index)].setBackground(new Color(255, 86, 74));
+
+            if (cust_btn == this.my_btn) {
+                cust_btn[coordinates.get(index)].setBackground(new Color(255, 86, 74));
+            }
 
         }
         for (int i = 0; i < coordinates.size(); i++) {
             cust_btn[coordinates.get(i)].setBusy();
-            System.out.println(cust_btn[coordinates.get(i)].getBusy());
-        }
 
-        System.out.println("Further DOWN" + coordinates);
+        }
         return coordinates;
     }
 
     public ArrayList<Integer> top(int initial_point, int length, boolean flag, CustomButton[] cust_btn) {
         ArrayList<Integer> coordinates = new ArrayList<Integer>();
-        System.out.println(initial_point + " of UP.");
         int pos;
         while (true) {
             try {
@@ -268,9 +256,11 @@ public class LogicProcessing {
             cust_btn[coordinates.get(i)].setBusy();
         }
         for (int index = 0; index < coordinates.size(); index++) {
-            cust_btn[coordinates.get(index)].setBackground(new Color(250, 252, 96));
+            if (cust_btn == this.my_btn) {
+                cust_btn[coordinates.get(index)].setBackground(new Color(250, 252, 96));
+            }
+
         }
-        System.out.println("Further down " + coordinates);
         return coordinates;
     }
 
@@ -339,9 +329,10 @@ public class LogicProcessing {
 
         }
         for (int index = 0; index < coordinates.size(); index++) {
-            cust_btn[coordinates.get(index)].setBackground(new Color(119, 247, 204));
+            if (cust_btn == this.my_btn) {
+                cust_btn[coordinates.get(index)].setBackground(new Color(119, 247, 204));
+            }
         }
-        System.out.println("This is right coordinates: " + coordinates);
         return coordinates;
     }
 
@@ -349,13 +340,10 @@ public class LogicProcessing {
         ArrayList<Integer> coordinates = new ArrayList<Integer>();
         int pos = initial_point;
         int row;
-        System.out.println(coordinates);
         while (true) {
             try {
                 row = cust_btn[pos].row;
-                System.out.println(cust_btn[pos].getBusy() + "ZZZZZZZZZZZZZZZ");
                 if (cust_btn[pos].getBusy() == false) {
-                    System.out.println(cust_btn[pos].getBusy());
                     break;
                 } else {
                     pos = initialPoint();
@@ -410,9 +398,11 @@ public class LogicProcessing {
             cust_btn[coordinates.get(i)].setBusy();
         }
         for (int index = 0; index < coordinates.size(); index++) {
-            cust_btn[coordinates.get(index)].setBackground(new Color(130, 143, 255));
+            if (cust_btn == this.my_btn) {
+                cust_btn[coordinates.get(index)].setBackground(new Color(130, 143, 255));
+            }
+
         }
-        System.out.println("This is right left: " + coordinates);
         return coordinates;
 
     }
@@ -478,10 +468,9 @@ public class LogicProcessing {
                     this.enemy_btn[coordinates.get(i)].setBackground(Color.green);
                 }
             }
-
-            System.out.println(coordinates);
         }
-
+        String radar = "Radar: " + this.radar;
+        this.graphics.l_radars.setText(radar);
     }
 
     public void shoot(int coordinate) {
@@ -522,8 +511,11 @@ public class LogicProcessing {
 
     public void shootController(int cell, boolean flag) {
         if ((flag == true) & (this.graphics.b_radar.isSelected()) & (this.radar != 0)) {
+            this.score++;
             dropRadar(cell);
             this.radar--;
+            String radar = "Radar: " + this.radar;
+            this.graphics.l_radars.setText(radar);
         }
         if (flag == true) {
             shoot(this.enemy_btn[cell].getId());
@@ -533,7 +525,6 @@ public class LogicProcessing {
             cpuMove();
             flag = true;
         }
-        System.out.println(this.graphics.b_radar.isSelected());
     }
 
     public void checkEnemyArrays(int coordinate) {
@@ -541,10 +532,11 @@ public class LogicProcessing {
         if (this.en_airCraftCarrier.contains(coordinate)) {
             this.en_airCraftCarrier_health--;
             this.score++;
-            System.out.println(this.en_airCraftCarrier_health + " current health!");
             if (this.en_airCraftCarrier_health == 0) {
                 this.cpuTotalShips--;
-                System.out.println("Total cpu ships " + this.cpuTotalShips);
+                this.graphics.l_air.setText("AirCraft Carrier Destroyed");
+                this.graphics.l_air.setForeground(Color.red);
+
                 this.score += 10;
             }
 
@@ -552,41 +544,41 @@ public class LogicProcessing {
         if (this.en_battleship.contains(coordinate)) {
             this.en_battleship_health--;
             this.score++;
-            System.out.println(this.en_battleship_health + " current health!");
             if (this.en_battleship_health == 0) {
                 this.cpuTotalShips--;
-                System.out.println("Total cpu ships " + this.cpuTotalShips);
+                this.graphics.l_bat.setText("BattleShip Destroyed");
+                this.graphics.l_bat.setForeground(Color.red);
                 this.score += 8;
             }
         }
         if (this.en_destroyer.contains(coordinate)) {
             this.en_destroyer_health--;
             this.score++;
-            System.out.println(this.en_destroyer_health + " current health!");
             if (this.en_destroyer_health == 0) {
                 this.cpuTotalShips--;
+                this.graphics.l_des.setText("Destroyer Destroyed");
+                this.graphics.l_des.setForeground(Color.red);
                 this.score += 6;
-                System.out.println("Total cpu ships " + this.cpuTotalShips);
             }
         }
         if (this.en_submarine.contains(coordinate)) {
             this.en_submarine_health--;
             this.score++;
-            System.out.println(this.en_patrol_boat_health + " current health!");
             if (this.en_submarine_health == 0) {
                 this.cpuTotalShips--;
                 this.score += 6;
-                System.out.println("Total cpu ships " + this.cpuTotalShips);
+                this.graphics.l_sub.setText("Submarine Destroyed");
+                this.graphics.l_sub.setForeground(Color.red);
             }
         }
         if (this.en_patrolBoat.contains(coordinate)) {
             this.en_patrol_boat_health--;
             this.score++;
-            System.out.println(this.en_patrol_boat_health + " current health!");
             if (this.en_patrol_boat_health == 0) {
                 this.cpuTotalShips--;
                 this.score += 4;
-                System.out.println("Total cpu ships " + this.cpuTotalShips);
+                this.graphics.l_pat.setText("Patrol Boat Carrier Destroyed");
+                this.graphics.l_pat.setForeground(Color.red);
             }
         }
         score_dis = "Score: " + this.score;
@@ -597,7 +589,6 @@ public class LogicProcessing {
         if (this.airCraftCarrier.contains(coordinate)) {
             this.airCraftCarrier_health--;
             this.score--;
-            System.out.println(this.airCraftCarrier_health + " current health!");
             if (this.airCraftCarrier_health == 0) {
                 this.playerTotalShips--;
             }
@@ -605,7 +596,6 @@ public class LogicProcessing {
         if (this.battleship.contains(coordinate)) {
             this.battleship_health--;
             this.score--;
-            System.out.println(this.battleship_health + " current health!");
             if (this.battleship_health == 0) {
                 this.playerTotalShips--;
             }
@@ -613,7 +603,6 @@ public class LogicProcessing {
         if (this.destroyer.contains(coordinate)) {
             this.destroyer_health--;
             this.score--;
-            System.out.println(this.destroyer_health + " current health!");
             if (this.destroyer_health == 0) {
                 this.playerTotalShips--;
             }
@@ -621,7 +610,6 @@ public class LogicProcessing {
         if (this.submarine.contains(coordinate)) {
             this.submarine_health--;
             this.score--;
-            System.out.println(this.submarine_health + " current health!");
             if (this.submarine_health == 0) {
                 this.playerTotalShips--;
             }
@@ -629,7 +617,6 @@ public class LogicProcessing {
         if (this.patrolBoat.contains(coordinate)) {
             this.patrol_boat_health--;
             this.score--;
-            System.out.println(this.patrol_boat_health + " current health!");
             if (this.patrol_boat_health == 0) {
                 this.playerTotalShips--;
             }
@@ -647,10 +634,14 @@ public class LogicProcessing {
     public void checkGameStatus() {
         if (this.cpuTotalShips == 0) {
             this.graphics.winnerPanel();
+            this.graphics.l_nickname.setText("Player Won!");
+            this.graphics.b_exit.setBounds(300, 400, 200, 80);
             System.out.println("Player won!");
         }
         if (this.playerTotalShips == 0) {
             this.graphics.winnerPanel();
+            this.graphics.l_nickname.setText("CPU Won!");
+            this.graphics.b_exit.setBounds(300, 400, 200, 80);
             System.out.println("CPU won!");
         }
     }
